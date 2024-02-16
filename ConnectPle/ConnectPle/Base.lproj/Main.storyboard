@@ -33,6 +33,27 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="132" y="-27"/>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="5uP-K8-PXf">
+            <objects>
+                <viewController id="XE8-r1-DxR" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2Sg-0g-Hvr">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="nOy-cY-P0J"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="E0W-he-R4a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1074" y="-27"/>
+>>>>>>> Adding bg
+>>>>>>> Adding bg
         </scene>
     </scenes>
     <resources>
