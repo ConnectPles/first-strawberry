@@ -9,36 +9,56 @@ import UIKit
 
 class IndexViewController: UIViewController {
 
-    @IBOutlet weak var bgImage: UIImageView!
-    let rollingLabel = UILabel()
-
+    @IBOutlet weak var verticalLabel: UILabel!
+    @IBOutlet weak var continueBtn: UIButton!
+    
+    
+    let beginPosition = CGPoint(x: 20, y: 40)
+    let endPosition = CGPoint(x: 20, y: 200)
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
-        // Setup the label with your desired text
-        rollingLabel.text = "Connect Couples."
-        rollingLabel.numberOfLines = 2 // Allows for multiple lines
-        rollingLabel.frame = CGRect(x: 20, y: -10, width: self.view.frame.size.width - 40, height: 200) // Start off-screen
-        self.view.addSubview(rollingLabel)
-
-        // Start the animation
-        animateLabel()
+        do {// verticallabel & its animation setup
+            verticalLabel.alpha = 0
+            verticalLabel.frame = CGRect(x: self.beginPosition.x, y: self.beginPosition.y, width: self.view.frame.size.width - 40, height: 150) // Start off-screen
+            self.view.addSubview(verticalLabel)
+            // Start the animation
+            animateLabel()
+            // tap to interrupt animation
+            let tap = UITapGestureRecognizer(target: self, action: #selector(interruptAnimation))
+            view.addGestureRecognizer(tap)
+        }
+        do {// continueBtn setup
+            self.continueBtn.titleLabel?.textAlignment = .center
+            self.continueBtn.layer.borderWidth = 2
+            self.continueBtn.layer.borderColor = UIColor.systemPurple.cgColor
+        }
     }
     
     func animateLabel() {
         // Calculate the end position of the label
-        let endPosition = 0 + rollingLabel.frame.size.height
 
         // Animate the label
-        UIView.animate(withDuration: 3, // Duration in seconds
+        UIView.animate(withDuration: 1, // Duration in seconds
                        delay: 0,
                        options: [.curveLinear],
                        animations: {
             // Move the label to the bottom of the screen
-            self.rollingLabel.frame = CGRect(x: 20, y: endPosition, width: self.rollingLabel.frame.size.width, height: self.rollingLabel.frame.size.height)
+            self.verticalLabel.frame = CGRect(x: self.endPosition.x, y: self.endPosition.y, width: self.verticalLabel.frame.size.width, height: self.verticalLabel.frame.size.height)
+            self.verticalLabel.alpha = 1
         }, completion: nil)
+    }
+    
+    @objc func interruptAnimation() {
+        if let theLayer = self.verticalLabel.layer.presentation() {
+            let theFrame = theLayer.frame
+            theLayer.removeAllAnimations()
+            UIView.animate(withDuration: 0.2, animations: {
+                self.verticalLabel.frame = CGRect(x: self.endPosition.x, y: self.endPosition.y, width: theFrame.size.width, height: theFrame.size.height)
+                self.verticalLabel.alpha = 1 // Ensure the label is fully visible
+            })
+        }
     }
     
     
