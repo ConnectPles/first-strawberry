@@ -13,15 +13,15 @@ class IndexViewController: UIViewController {
     @IBOutlet weak var continueBtn: UIButton!
     
     
-    let beginPosition = CGPoint(x: 20, y: 40)
-    let endPosition = CGPoint(x: 20, y: 200)
+    let beginPosition = INDEX_VERTICAL_LABEL_BEGIN_POSITION
+    let endPosition = INDEX_VERTICAL_LABEL_END_POSITION
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         do {// verticallabel & its animation setup
             verticalLabel.alpha = 0
-            verticalLabel.frame = CGRect(x: self.beginPosition.x, y: self.beginPosition.y, width: self.view.frame.size.width - 40, height: 150) // Start off-screen
+            verticalLabel.frame = CGRect(x: self.beginPosition.x, y: self.beginPosition.y, width: self.view.frame.size.width - 100, height: 150) // Start off-screen
             self.view.addSubview(verticalLabel)
             // Start the animation
             animateLabel()
@@ -33,6 +33,7 @@ class IndexViewController: UIViewController {
             self.continueBtn.titleLabel?.textAlignment = .center
             self.continueBtn.layer.borderWidth = 2
             self.continueBtn.layer.borderColor = UIColor.systemPurple.cgColor
+            self.continueBtn.layer.cornerRadius = 10
         }
     }
     
