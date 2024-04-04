@@ -17,45 +17,45 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="vZK-CO-1T4">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ConnectPles UI Design" translatesAutoresizingMaskIntoConstraints="NO" id="vZK-CO-1T4">
                                 <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
-                                <color key="backgroundColor" red="0.89498307421431811" green="0.83652685483748501" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.99215686319999996" green="0.74230970534700857" blue="0.67519157811161368" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </imageView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Welcome to the  &quot;Happily Ever After&quot; Community!" lineBreakMode="tailTruncation" numberOfLines="4" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tlV-RS-xaz">
-                                <rect key="frame" x="50" y="39" width="280" height="201"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="Impact" family="Impact" pointSize="25"/>
-                                <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zkW-u0-ePE">
-                                <rect key="frame" x="50" y="643" width="293" height="75"/>
-                                <state key="normal" title="Button"/>
-                                <buttonConfiguration key="configuration" style="filled" title="Get Me  &quot;Couple&quot; Friends!" cornerStyle="capsule" titleAlignment="center">
-                                    <fontDescription key="titleFontDescription" name="Impact" family="Impact" pointSize="25"/>
-                                    <color key="baseForegroundColor" systemColor="systemPurpleColor"/>
-                                    <color key="baseBackgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </buttonConfiguration>
+                                <rect key="frame" x="98.333333333333329" y="690.66666666666663" width="196.33333333333337" height="71"/>
+                                <fontDescription key="fontDescription" name="Impact" family="Impact" pointSize="25"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="Log In">
+                                    <color key="titleColor" red="1" green="0.62352941179999999" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
                                 <connections>
                                     <action selector="continueBtnTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SBc-i6-SEb"/>
                                 </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Manage your couple recipe, honey-do list, and more!" lineBreakMode="tailTruncation" numberOfLines="4" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tlV-RS-xaz">
+                                <rect key="frame" x="50" y="123" width="534" height="244"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="Impact" family="Impact" pointSize="25"/>
+                                <color key="textColor" red="1" green="0.62352941179999999" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="zkW-u0-ePE" secondAttribute="bottom" constant="100" id="0f1-St-jEV"/>
                             <constraint firstAttribute="bottom" secondItem="vZK-CO-1T4" secondAttribute="bottom" id="622-hx-NxG"/>
+                            <constraint firstItem="zkW-u0-ePE" firstAttribute="height" secondItem="vZK-CO-1T4" secondAttribute="height" multiplier="1:12" id="8eZ-Dx-MbH"/>
                             <constraint firstItem="vZK-CO-1T4" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Bum-j5-kNK"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="zkW-u0-ePE" secondAttribute="trailing" constant="50" id="Rtc-WX-dn9"/>
-                            <constraint firstItem="zkW-u0-ePE" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="50" id="ak5-rj-zCk"/>
+                            <constraint firstItem="zkW-u0-ePE" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="WJN-eG-N0v"/>
                             <constraint firstItem="vZK-CO-1T4" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="irz-LH-HkR"/>
+                            <constraint firstItem="zkW-u0-ePE" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="300" id="mNr-0e-0ep"/>
+                            <constraint firstItem="zkW-u0-ePE" firstAttribute="width" secondItem="vZK-CO-1T4" secondAttribute="width" multiplier="1:2" id="q87-Rm-KdV"/>
                             <constraint firstAttribute="trailing" secondItem="vZK-CO-1T4" secondAttribute="trailing" id="w1L-1K-NRA"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="WOo-kZ-gcJ"/>
                     <connections>
-                        <outlet property="continueBtn" destination="zkW-u0-ePE" id="kwt-YU-OBt"/>
+                        <outlet property="logInBtn" destination="zkW-u0-ePE" id="kwt-YU-OBt"/>
                         <outlet property="verticalLabel" destination="tlV-RS-xaz" id="fdU-eR-geQ"/>
                         <segue destination="2jS-Jd-w1S" kind="presentation" identifier="IndexToMainNav" modalPresentationStyle="fullScreen" modalTransitionStyle="flipHorizontal" id="wCI-cS-Bda"/>
                     </connections>
@@ -140,12 +140,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="ConnectPles UI Design" width="131" height="284"/>
         <image name="arrowshape.left.fill" catalog="system" width="128" height="104"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemPurpleColor">
-            <color red="0.68627450980000004" green="0.32156862749999998" blue="0.87058823529999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
