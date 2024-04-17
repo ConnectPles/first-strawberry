@@ -6,28 +6,42 @@
 //
 
 import UIKit
+import GoogleSignIn
 
 class LoginViewController: UIViewController, UITextFieldDelegate {
 
-    @IBOutlet weak var usernameTextField: UITextField!
+    @IBOutlet weak var emailTextField: UITextField!
     
     @IBOutlet weak var passwordTextField: UITextField!
     
+    @IBOutlet weak var loginBtn: UIButton!
+    
+    @IBOutlet weak var googleSigninButton: UIButton!
+    
+    @IBOutlet weak var signupBtn: UIButton!
+
+    @IBOutlet weak var warningLabel: UILabel!
+    
+    
     var textFieldWidth: CGFloat?
     var textFieldHeight: CGFloat?
+    
+    let userAccount = UserAccount.sharedInstance
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         do {//Create username textfield
             self.textFieldWidth = self.view.frame.width / 3 * 2
             self.textFieldHeight = self.view.frame.height / 15
             
-            let usernameTextFieldIcon = UIImage(systemName: "person.fill")
-            let usernameTextFieldImageView = UIImageView(image: usernameTextFieldIcon)
-            usernameTextFieldImageView.tintColor = .gray
-            self.usernameTextField.leftView = usernameTextFieldImageView
-            self.usernameTextField.leftViewMode = .always
-            self.usernameTextField.borderStyle = .roundedRect
-            self.usernameTextField.placeholder = "Username"
+            let emailTextFieldIcon = UIImage(systemName: "person.fill")
+            let emailTextFieldImageView = UIImageView(image: emailTextFieldIcon)
+            emailTextFieldImageView.tintColor = .gray
+            self.emailTextField.leftView = emailTextFieldImageView
+            self.emailTextField.leftViewMode = .always
+            self.emailTextField.borderStyle = .roundedRect
+            self.emailTextField.placeholder = "Email"
         }
         do {//Create password textfield
             let passwordTextFieldIcon = UIImage(systemName: "lock.fill")
@@ -51,16 +65,64 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self.passwordTextField.rightViewMode = .always
             self.passwordTextField.isSecureTextEntry = true
         }
-        do{//set dismiss keyboard
+        do {//set dismiss keyboard
             let dismissTap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
            view.addGestureRecognizer(dismissTap)
-            
+        }
+        do {//adjust login button style
+            self.loginBtn.layer.borderWidth = 2
+            self.loginBtn.layer.cornerRadius = 30
+            self.loginBtn.layer.borderColor = UIColor(red: 1, green: 0.625, blue: 0.625, alpha: 1).cgColor
+        }
+        do {// warning label setup
+            self.warningLabel.text = ""
+        }
+        do {//set google signup button
+            self.googleSigninButton.layer.borderWidth = 2
+            self.googleSigninButton.layer.cornerRadius = 30
+            self.googleSigninButton.layer.borderColor = UIColor(red: 1, green: 0.625, blue: 0.625, alpha: 1).cgColor
+            self.googleSigninButton.layer.backgroundColor = UIColor.white.cgColor
+            self.googleSigninButton.setImage(UIImage(named: "GoogleLogo"), for: .normal)
         }
     }
     
     @IBAction func backBtnTapped(_ sender: UIBarButtonItem) {
+        self.warningLabel.text = ""
         self.dismiss(animated: true)
     }
+    
+    @IBAction func loginBtnTapped(_ sender: UIButton) {
+        self.warningLabel.text = ""
+        if (self.emailTextField.hasText && self.passwordTextField.hasText &&
+            self.userAccount.isValidEmail(testStr: self.emailTextField.text!)) {
+            userAccount.loginUser(email: self.emailTextField.text!, password: self.passwordTextField.text!, completion: { result in
+                if (result == true) {
+                    //perform segue
+                    self.performSegue(withIdentifier: "LoginToMain", sender: sender)
+                }
+                else {
+                    //show alarm
+                    self.warningLabel.text = "Login failed. Email and password not match or account does not exist."
+                }
+            })
+        } else {
+            self.warningLabel.text = "Please choose a login method or sign up!"
+        }
+    }
+    
+    @IBAction func signupBtnTapped(_ sender: UIButton) {
+    }
+    
+    @IBAction func googleSignInBtnTapped(_ sender: UIButton) {
+        self.userAccount.signupByGoogle(ViewToPresent: self, completion: { result in
+            if result == true {
+                //send segue
+            } else {
+                //warning label
+            }
+        })
+    }
+    
     
     @objc func togglePasswordVisibility(_ sender: UIButton) {
         self.passwordTextField.isSecureTextEntry.toggle()
@@ -70,20 +132,34 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     //for dismiss keyboard
     @objc func dismissKeyboard() {
         view.endEditing(true)
-//        alarmLabel.text = ""
+        self.warningLabel.text = ""
     }
     
     func textFieldDidChangeSelection(_ textField: UITextField) {
-//        alarmLabel.text = ""
+        self.warningLabel.text = ""
+        if textField == self.emailTextField {
+            if (textField.text != nil && self.userAccount.isValidEmail(testStr: textField.text!) == false) {
+                self.warningLabel.text = "Email format not valid."
+            } else {
+                self.warningLabel.text = ""
+            }
+        } else {
+            if let passwordText = textField.text {
+                if let passwordWarning = self.userAccount.isPasswordSecure(password: passwordText) {
+                    self.warningLabel.text = passwordWarning
+                } else {
+                    self.warningLabel.text = ""
+                }
+            }
+        }
     }
     
     //If textfield keyboard return key is pressed, retrieve keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == self.usernameTextField {
+        if textField == self.emailTextField {
             textField.resignFirstResponder()
             self.passwordTextField.becomeFirstResponder()
-        }
-        else {
+        } else {
             textField.resignFirstResponder()
         }
         return true

@@ -7,7 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B22098852BC0FE3E00E6E3AB /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22098842BC0FE3E00E6E3AB /* UIColor.swift */; };
+		B22098872BC34D5F00E6E3AB /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22098862BC34D5F00E6E3AB /* UserModel.swift */; };
+		B22098882BC34D5F00E6E3AB /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22098862BC34D5F00E6E3AB /* UserModel.swift */; };
+		B22098892BC34D5F00E6E3AB /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22098862BC34D5F00E6E3AB /* UserModel.swift */; };
 		B2211D232B80190200DE823A /* IndexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2211D222B80190100DE823A /* IndexViewController.swift */; };
 		B2211D242B80190200DE823A /* IndexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2211D222B80190100DE823A /* IndexViewController.swift */; };
 		B2211D252B80190200DE823A /* IndexViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2211D222B80190100DE823A /* IndexViewController.swift */; };
@@ -17,9 +19,6 @@
 		B230B5532B982124005F2072 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B230B5522B982124005F2072 /* LoginViewController.swift */; };
 		B230B5542B982124005F2072 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B230B5522B982124005F2072 /* LoginViewController.swift */; };
 		B230B5552B982124005F2072 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B230B5522B982124005F2072 /* LoginViewController.swift */; };
-		B23BBA6C2BAB642E0021294F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B23BBA6B2BAB642E0021294F /* GoogleService-Info.plist */; };
-		B23BBA6D2BAB642E0021294F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B23BBA6B2BAB642E0021294F /* GoogleService-Info.plist */; };
-		B23BBA6E2BAB642E0021294F /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B23BBA6B2BAB642E0021294F /* GoogleService-Info.plist */; };
 		B23BBA712BAB65290021294F /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B23BBA702BAB65290021294F /* FirebaseAnalytics */; };
 		B23BBA732BAB65290021294F /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B23BBA722BAB65290021294F /* FirebaseAnalyticsSwift */; };
 		B23BBA752BAB69F40021294F /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = B23BBA742BAB69F40021294F /* FirebaseAuth */; };
@@ -40,6 +39,9 @@
 		B2B691B72B7ED920007691AB /* ConnectPleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B691B62B7ED920007691AB /* ConnectPleTests.swift */; };
 		B2B691C12B7ED920007691AB /* ConnectPleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B691C02B7ED920007691AB /* ConnectPleUITests.swift */; };
 		B2B691C32B7ED920007691AB /* ConnectPleUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B691C22B7ED920007691AB /* ConnectPleUITestsLaunchTests.swift */; };
+		B2CC7F4D2BCB4F0200957DE5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B2CC7F4C2BCB4F0200957DE5 /* GoogleService-Info.plist */; };
+		B2CC7F4E2BCB4F0200957DE5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B2CC7F4C2BCB4F0200957DE5 /* GoogleService-Info.plist */; };
+		B2CC7F4F2BCB4F0200957DE5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B2CC7F4C2BCB4F0200957DE5 /* GoogleService-Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,11 +62,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B22098842BC0FE3E00E6E3AB /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		B22098862BC34D5F00E6E3AB /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		B2211D222B80190100DE823A /* IndexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexViewController.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		B230B54E2B98210B005F2072 /* FriendListsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListsViewController.swift; sourceTree = "<group>"; };
 		B230B5522B982124005F2072 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		B23BBA6B2BAB642E0021294F /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B23BBA792BAB737E0021294F /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		B23BBA7D2BAB75800021294F /* UserAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAccount.swift; sourceTree = "<group>"; };
 		B2B6919C2B7ED91E007691AB /* ConnectPle.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ConnectPle.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -79,6 +80,7 @@
 		B2B691BC2B7ED920007691AB /* ConnectPleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnectPleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2B691C02B7ED920007691AB /* ConnectPleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectPleUITests.swift; sourceTree = "<group>"; };
 		B2B691C22B7ED920007691AB /* ConnectPleUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectPleUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B2CC7F4C2BCB4F0200957DE5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,6 +114,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B220988A2BC34F4000E6E3AB /* UserAccount */ = {
+			isa = PBXGroup;
+			children = (
+				B23BBA7D2BAB75800021294F /* UserAccount.swift */,
+				B22098862BC34D5F00E6E3AB /* UserModel.swift */,
+			);
+			path = UserAccount;
+			sourceTree = "<group>";
+		};
 		B2211D1E2B80187800DE823A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -125,7 +136,7 @@
 		B2211D1F2B80189800DE823A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				B23BBA7D2BAB75800021294F /* UserAccount.swift */,
+				B220988A2BC34F4000E6E3AB /* UserAccount */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -135,7 +146,6 @@
 			children = (
 				B2B6919F2B7ED91E007691AB /* AppDelegate.swift */,
 				B2B691A12B7ED91E007691AB /* SceneDelegate.swift */,
-				B22098842BC0FE3E00E6E3AB /* UIColor.swift */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
@@ -187,7 +197,7 @@
 				B2211D1E2B80187800DE823A /* Controllers */,
 				B2B691A82B7ED91F007691AB /* Assets.xcassets */,
 				B2B691AD2B7ED91F007691AB /* Info.plist */,
-				B23BBA6B2BAB642E0021294F /* GoogleService-Info.plist */,
+				B2CC7F4C2BCB4F0200957DE5 /* GoogleService-Info.plist */,
 			);
 			path = ConnectPle;
 			sourceTree = "<group>";
@@ -326,7 +336,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B2B691AC2B7ED91F007691AB /* LaunchScreen.storyboard in Resources */,
-				B23BBA6C2BAB642E0021294F /* GoogleService-Info.plist in Resources */,
+				B2CC7F4D2BCB4F0200957DE5 /* GoogleService-Info.plist in Resources */,
 				B2B691A92B7ED91F007691AB /* Assets.xcassets in Resources */,
 				B2B691A72B7ED91E007691AB /* Main.storyboard in Resources */,
 			);
@@ -336,7 +346,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B23BBA6D2BAB642E0021294F /* GoogleService-Info.plist in Resources */,
+				B2CC7F4E2BCB4F0200957DE5 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -344,7 +354,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B23BBA6E2BAB642E0021294F /* GoogleService-Info.plist in Resources */,
+				B2CC7F4F2BCB4F0200957DE5 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,8 +369,8 @@
 				B2B691A02B7ED91E007691AB /* AppDelegate.swift in Sources */,
 				B2B691A22B7ED91E007691AB /* SceneDelegate.swift in Sources */,
 				B230B5532B982124005F2072 /* LoginViewController.swift in Sources */,
+				B22098872BC34D5F00E6E3AB /* UserModel.swift in Sources */,
 				B2211D232B80190200DE823A /* IndexViewController.swift in Sources */,
-				B22098852BC0FE3E00E6E3AB /* UIColor.swift in Sources */,
 				B23BBA7A2BAB737E0021294F /* Constants.swift in Sources */,
 				B23BBA7E2BAB75800021294F /* UserAccount.swift in Sources */,
 			);
@@ -376,6 +386,7 @@
 				B230B5502B98210B005F2072 /* FriendListsViewController.swift in Sources */,
 				B2B691B72B7ED920007691AB /* ConnectPleTests.swift in Sources */,
 				B2211D242B80190200DE823A /* IndexViewController.swift in Sources */,
+				B22098882BC34D5F00E6E3AB /* UserModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,6 +398,7 @@
 				B2B691C12B7ED920007691AB /* ConnectPleUITests.swift in Sources */,
 				B2B691C32B7ED920007691AB /* ConnectPleUITestsLaunchTests.swift in Sources */,
 				B230B5552B982124005F2072 /* LoginViewController.swift in Sources */,
+				B22098892BC34D5F00E6E3AB /* UserModel.swift in Sources */,
 				B2211D252B80190200DE823A /* IndexViewController.swift in Sources */,
 				B23BBA7C2BAB737E0021294F /* Constants.swift in Sources */,
 				B23BBA802BAB75800021294F /* UserAccount.swift in Sources */,
@@ -562,6 +574,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -590,6 +603,7 @@
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

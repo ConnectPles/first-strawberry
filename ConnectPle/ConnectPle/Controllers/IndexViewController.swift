@@ -20,8 +20,13 @@ class IndexViewController: UIViewController {
     var logInBtnHeight: CGFloat?
     var logInBtnWidth: CGFloat?
     
+    let userAccount = UserAccount.sharedInstance
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        userAccount.logoutUser(completion: {_ in})
+        
         labelHeight = self.view.frame.size.height / 3
         labelWidth = self.view.frame.size.width - 100
         logInBtnHeight = self.view.frame.size.height / 10
@@ -38,12 +43,11 @@ class IndexViewController: UIViewController {
         }
         
         do {// continueBtn setup
-            self.logInBtn.layer.cornerRadius = 10
+            self.logInBtn.layer.cornerRadius = 30
             self.logInBtn.layer.borderWidth = 2
             self.logInBtn.backgroundColor = .white
             self.logInBtn.layer.borderColor = UIColor(red: 1, green: 0.625, blue: 0.625, alpha: 1).cgColor
             self.logInBtn.titleLabel?.textAlignment = .center
-            
         }
     }
     
