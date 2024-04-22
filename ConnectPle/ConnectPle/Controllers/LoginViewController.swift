@@ -18,8 +18,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var googleSigninButton: UIButton!
     
-    @IBOutlet weak var signupBtn: UIButton!
-
     @IBOutlet weak var warningLabel: UILabel!
     
     
@@ -110,8 +108,6 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @IBAction func signupBtnTapped(_ sender: UIButton) {
-    }
     
     @IBAction func googleSignInBtnTapped(_ sender: UIButton) {
         self.userAccount.signupByGoogle(ViewToPresent: self, completion: { result in
