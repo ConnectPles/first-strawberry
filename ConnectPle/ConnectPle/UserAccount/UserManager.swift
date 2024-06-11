@@ -14,28 +14,21 @@ import GoogleSignIn
 
 import UIKit.UIViewController
 
-class UserAccount {
+class UserManager {
     //make current class static
-    static let sharedInstance = UserAccount()
+    static let sharedInstance = UserManager()
     
     private var userAuth: User?
-    private var userModel: UserModel?
-    // Completion handler array between authUser and userModel
-    private var onAuthUserLoaded: [(Bool) -> Void] = []
-    
+    private var userProfile: UserProfile?
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
     
-    private let UserAccountRef: DatabaseReference?
     
     init() {
-        self.UserAccountRef = Database.database().reference().child("UserAccounts")
-
         Auth.auth().addStateDidChangeListener{ Auth, User in
             if let userAuth = User {
                 print("logged in: " + userAuth.uid)
                 self.userAuth = userAuth
-                self.loadUserAccount(completion: {_ in})
             }
             else {
                 print("User logged out.")
@@ -44,26 +37,75 @@ class UserAccount {
     }
     
     
-    public func loginUser(email: String, password: String, completion: @escaping (Bool) -> Void) {
+    public func loginUser(email: String, password: String, completion: @escaping (Result<Void, AuthError>) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password, completion: ({ authResult, error in
             if error == nil && authResult != nil {
-                completion(true)
+                //load existing user profile
+                self.userProfile = UserProfile(uid: authResult!.user.uid, dataPath: DATA_PATH, completion: { result in
+                    if result {
+                        completion(.success(()))
+                    } else {
+                        completion(.failure(.unknownError("ERROR: Login: User profile not found")))
+                    }
+                })
             } else {
-                print("Login email user failed: \(error!)")
-                completion(false)
+                if let error = error as NSError? {
+                    switch error.code {
+                    case AuthErrorCode.userNotFound.rawValue:
+                        completion(.failure(.userNotFound))
+                    case AuthErrorCode.wrongPassword.rawValue:
+                        completion(.failure(.wrongPassword))
+                    default:
+                        print("Error: \(error.localizedDescription)")
+                        completion(.failure(.unknownError(error.localizedDescription)))
+                    }
+                }
             }
         }))
     }
     
     
-    private func loginUser(credential: AuthCredential, completion: @escaping (Bool) -> Void) {
+    private func loginUser(credential: AuthCredential, completion: @escaping (Result<Void, AuthError>) -> Void) {
         Auth.auth().signIn(with: credential, completion: { authResult, authError in
             if authError == nil && authResult != nil {
-                completion(true)
+                if let additionalUserInfo = authResult!.additionalUserInfo {
+                    if additionalUserInfo.isNewUser {
+                        //initialize new user profile
+                        self.userProfile = UserProfile(
+                            firstName: String("Fur" + authResult!.user.uid.prefix(5)), lastName: "Pup",
+                            uid: authResult!.user.uid, dataPath: DATA_PATH, completion: { result in
+                                if result {
+                                    completion(.success(()))
+                                } else {
+                                    completion(.failure(.unknownError("ERROR: Login: User profile not found")))
+                                }
+                            }
+                        )
+                    } else {
+                        //load existing user profile
+                        self.userProfile = UserProfile(uid: authResult!.user.uid, dataPath: DATA_PATH, completion: { result in
+                            if result {
+                                completion(.success(()))
+                            } else {
+                                completion(.failure(.unknownError("ERROR: Login: User profile not found")))
+                            }
+                        })
+                    }
+                }
             } else {
-                print("Login credential user failed: \(authError!)")
-                completion(false)
+                if let error = authError as NSError? {
+                    switch error.code {
+                    case AuthErrorCode.userNotFound.rawValue:
+                        completion(.failure(.userNotFound))
+                    case AuthErrorCode.wrongPassword.rawValue:
+                        completion(.failure(.wrongPassword))
+                    default:
+                        print("Error: \(error.localizedDescription)")
+                        completion(.failure(.unknownError(error.localizedDescription)))
+                    }
+                }
             }
+            
         })
     }
     
@@ -72,43 +114,78 @@ class UserAccount {
     public func logoutUser(completion: @escaping (Bool) -> Void) {
             do {
                 try Auth.auth().signOut()
+                //unload existing user profile
+                self.userProfile = nil
                 completion(true)
             } catch let signOutError as NSError{
                 print("Error signing out: %@", signOutError)
                 completion(false)
             }
-        
-        
     }
     
+//    
+//    private func loadUserAccount (completion: @escaping (Bool) -> Void) {
+//        if let userAuth = self.userAuth {
+//            self.UserAccountRef!.child(userAuth.uid).observeSingleEvent(of: .value, with: { snapshot in
+//                if snapshot.exists() {
+//                    do {
+//                        let userData = try JSONSerialization.data(withJSONObject: snapshot.value!)
+//                        print("json result: \(userData)")
+//                        self.userProfile = try self.decoder.decode(UserModel.self, from: userData)
+//                        print("SUCCESS: UserAccount is loaded.")
+//                        completion(true)
+//                    } catch {
+//                        print("ERROR: UserAccount parsing error: \(error)")
+//                        completion(false)
+//                    }
+//                } else {
+//                    print("ERROR: userAccount node not exist.")
+//                    completion(false)
+//                }
+//            })
+//        }
+//        else {
+//            onAuthUserLoaded.append(completion)
+//        }
+//    }
     
-    private func loadUserAccount (completion: @escaping (Bool) -> Void) {
-        if let userAuth = self.userAuth {
-            self.UserAccountRef!.child(userAuth.uid).observeSingleEvent(of: .value, with: { snapshot in
-                do {
-                    let userData = try JSONSerialization.data(withJSONObject: snapshot.value!)
-                    print("json result: \(userData)")
-                    self.userModel = try self.decoder.decode(UserModel.self, from: userData)
-                    print("SUCCESS: UserAccount is loaded.")
-                    completion(true)
-                } catch {
-                    print("ERROR: UserAccount parsing error: \(error)")
-                    completion(false)
+    public func signupByEmailPassword(email: String, password: String, completion: @escaping (Result<Void, AuthError>) -> Void) {
+        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+            if error == nil && authResult != nil {
+                //initialize new user profile
+                self.userProfile = UserProfile(
+                    firstName: String("Fur" + authResult!.user.uid.prefix(5)), lastName: "Pup",
+                    uid: authResult!.user.uid, dataPath: DATA_PATH, completion: { result in
+                        if result {
+                            completion(.success(()))
+                        } else {
+                            completion(.failure(.unknownError("ERROR: Login: User profile not found")))
+                        }
+                    }
+                )
+            } else {
+                if let error = error as NSError? {
+                    switch error.code {
+                    case AuthErrorCode.emailAlreadyInUse.rawValue:
+                        completion(.failure(.emailAlreadyInUse))
+                    case AuthErrorCode.invalidEmail.rawValue:
+                        completion(.failure(.invalidEmail))
+                    default:
+                        print("Error: \(error.localizedDescription)")
+                        completion(.failure(.unknownError(error.localizedDescription)))
+                    }
                 }
-            })
-        }
-        else {
-            onAuthUserLoaded.append(completion)
+            }
         }
     }
     
     
-    public func signupByGoogle(ViewToPresent: UIViewController, completion: @escaping (Bool) -> Void) {
+    public func signupByGoogle(ViewToPresent: UIViewController, completion: @escaping (Result<Void, AuthError>) -> Void) {
         if let clientID = FirebaseApp.app()?.options.clientID {
             let config = GIDConfiguration(clientID: clientID)
             GIDSignIn.sharedInstance.configuration = config
             GIDSignIn.sharedInstance.signIn(withPresenting: ViewToPresent) { result, error in
-                if error == nil {
+                if error == nil && result != nil {
                     if let user = result?.user, let idToken = user.idToken?.tokenString {
                         let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: user.accessToken.tokenString)
                         self.loginUser(credential: credential, completion: { loginResult in
@@ -116,16 +193,16 @@ class UserAccount {
                         })
                     } else {
                         print("ERROR: GIDSignIn user not found.")
-                        completion(false)
+                        completion(.failure(.unknownError(error!.localizedDescription)))
                     }
                 } else {
                     print("ERROR: GIDSignIn error: \(String(describing: error))")
-                    completion(false)
+                    completion(.failure(.unknownError(error!.localizedDescription)))
                 }
             }
         } else {
             print("ERROR: Database ID not found.")
-            completion(false)
+            completion(.failure(.unknownError("Database ID not found.")))
         }
     }
 

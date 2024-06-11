@@ -20,7 +20,7 @@ class IndexViewController: UIViewController {
     var logInBtnHeight: CGFloat?
     var logInBtnWidth: CGFloat?
     
-    let userAccount = UserAccount.sharedInstance
+    let userAccount = UserManager.sharedInstance
     
     override func viewDidLoad() {
         super.viewDidLoad()

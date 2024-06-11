@@ -20,11 +20,13 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var warningLabel: UILabel!
     
+//    var alertController: UIAlertController?
     
     var textFieldWidth: CGFloat?
     var textFieldHeight: CGFloat?
     
-    let userAccount = UserAccount.sharedInstance
+    
+    let userAccount = UserManager.sharedInstance
 
     
     override func viewDidLoad() {
@@ -92,16 +94,48 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBAction func loginBtnTapped(_ sender: UIButton) {
         self.warningLabel.text = ""
         if (self.emailTextField.hasText && self.passwordTextField.hasText &&
-            self.userAccount.isValidEmail(testStr: self.emailTextField.text!)) {
+            self.userAccount.isValidEmail(testStr: self.emailTextField.text!) && self.userAccount.isPasswordSecure(password: self.passwordTextField.text!) == nil) {
             userAccount.loginUser(email: self.emailTextField.text!, password: self.passwordTextField.text!, completion: { result in
-                if (result == true) {
-                    //perform segue
+                switch result {
+                case .success:
                     self.performSegue(withIdentifier: "LoginToMain", sender: sender)
+                case .failure(let authError):
+                    switch authError {
+                    case .userNotFound:
+                        self.presentAlert(title: "New User?", message: "Press Confirm to register.", authError: .userNotFound)
+                    case .wrongPassword:
+                        self.presentAlert(title: "Login Failed", message: "User not found or password does not match.", authError: .wrongPassword)
+                    case .invalidEmail:
+                        self.presentAlert(title: "Login Failed", message: "Email invalid.", authError: .invalidEmail)
+                    default:
+                        self.presentAlert(title: "Unknown Error", message: "", authError: .unknownError(""))
+                    }
                 }
-                else {
-                    //show alarm
-                    self.warningLabel.text = "Login failed. Email and password not match or account does not exist."
-                }
+//                if (result == true) {
+//                    self.performSegue(withIdentifier: "LoginToMain", sender: sender)
+//                }
+//                else {
+//                    //show alarm
+////                    self.warningLabel.text = "Login failed. Email and password not match or account does not exist."
+//                        let alertController = UIAlertController(title: "New User?", message: "Confirm you are registering with email \(self.emailTextField.text!).", preferredStyle: .alert)
+//                        
+//                        // Add an OK action
+//                        let confirmAction = UIAlertAction(title: "Confirm", style: .default) { _ in
+//                            self.performSegue(withIdentifier: "LoginToMain", sender: sender)
+//                        }
+//                        alertController.addAction(confirmAction)
+//                        
+//                        // Add a Cancel action
+//                    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+//                        self.emailTextField.text = ""
+//                        self.passwordTextField.text = ""
+//                    }
+//                        alertController.addAction(cancelAction)
+//                        
+//                        // Present the alert controller
+//                        self.present(alertController, animated: true, completion: nil)
+//                    
+//                }
             })
         } else {
             self.warningLabel.text = "Please choose a login method or sign up!"
@@ -111,10 +145,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBAction func googleSignInBtnTapped(_ sender: UIButton) {
         self.userAccount.signupByGoogle(ViewToPresent: self, completion: { result in
-            if result == true {
-                //send segue
-            } else {
-                //warning label
+            switch result {
+            case .success:
+                self.performSegue(withIdentifier: "LoginToMain", sender: sender)
+            case .failure(let authError):
+                self.presentAlert(title: "Unknown Error", message: "", authError: authError)
             }
         })
     }
@@ -159,6 +194,56 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             textField.resignFirstResponder()
         }
         return true
+    }
+    
+    private func presentAlert(title: String, message: String, authError: AuthError) {
+            let loginAlert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+            // Add an OK action
+        switch authError {
+            case .userNotFound:
+                let confirmAction = UIAlertAction(title: "Confirm", style: .default) { _ in
+                    self.userAccount.signupByEmailPassword(email: self.emailTextField.text!, password: self.passwordTextField.text!, completion: { signupError in
+                        switch signupError {
+                            case .failure(_):
+                                //create new alert
+                                let signupAlert = UIAlertController(title: "Signup Failed", message: "Unable to sign up. Please try again.", preferredStyle: .alert)
+                                signupAlert.addAction(UIAlertAction(title: "OK", style: .default))
+                                self.emailTextField.text = ""
+                                self.passwordTextField.text = ""
+                                if !signupAlert.isBeingPresented {
+                                    self.present(signupAlert, animated: true, completion: nil)
+                                }
+                            case .success(_):
+                                self.performSegue(withIdentifier: "LoginToMain", sender: self)
+                        }
+                    })
+                }
+                loginAlert.addAction(confirmAction)
+                
+                // Add a Cancel action
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+                    self.emailTextField.text = ""
+                    self.passwordTextField.text = ""
+                }
+                loginAlert.addAction(cancelAction)
+
+            default:
+                let confirmAction = UIAlertAction(title: "Confirm", style: .default){ _ in
+                    self.emailTextField.text = ""
+                    self.passwordTextField.text = ""
+                }
+                loginAlert.addAction(confirmAction)
+                let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+                    self.emailTextField.text = ""
+                    self.passwordTextField.text = ""
+                }
+                loginAlert.addAction(cancelAction)
+            }
+        
+        if !loginAlert.isBeingPresented {
+            present(loginAlert, animated: true, completion: nil)
+            
+        }
     }
     
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="B3o-6F-SKY">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina5_9" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -109,6 +109,7 @@ Manage your couple recipe, honey-do list, and more!</string>
                                     <attributedString key="attributedTitle">
                                         <fragment content="Login">
                                             <attributes>
+                                                <color key="NSColor" red="0.94901967050000002" green="0.63921570780000003" blue="0.63137257099999999" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                                 <font key="NSFont" size="25" name="Impact"/>
                                                 <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                             </attributes>
@@ -201,7 +202,7 @@ Manage your couple recipe, honey-do list, and more!</string>
                         <outlet property="loginBtn" destination="TmX-Un-hZZ" id="Qaw-nh-8aH"/>
                         <outlet property="passwordTextField" destination="LGc-8n-dYd" id="SEA-jE-eIu"/>
                         <outlet property="warningLabel" destination="TU2-an-iFe" id="ZAL-3y-1Sq"/>
-                        <segue destination="B3o-6F-SKY" kind="presentation" identifier="LoginToMain" modalPresentationStyle="fullScreen" modalTransitionStyle="flipHorizontal" id="lBf-40-140"/>
+                        <segue destination="B3o-6F-SKY" kind="presentation" identifier="LoginToMain" modalPresentationStyle="fullScreen" id="lBf-40-140"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E0W-he-R4a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -244,10 +245,26 @@ Manage your couple recipe, honey-do list, and more!</string>
             </objects>
             <point key="canvasLocation" x="3588" y="2384"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="K2I-i0-dbD">
+            <objects>
+                <viewController id="AeE-wH-Lv7" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="2nH-FT-TOe">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="802"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="w2g-AO-ZYE"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="M9y-Pn-Ckp"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="CgA-Ru-tMz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="457" y="2488"/>
+        </scene>
         <!--Menu-->
         <scene sceneID="ZZO-Gn-AXr">
             <objects>
-                <viewController id="9sb-QW-8xr" sceneMemberID="viewController">
+                <viewController id="9sb-QW-8xr" customClass="MenuViewController" customModule="ConnectPle" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RwW-ca-zgi">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -255,13 +272,57 @@ Manage your couple recipe, honey-do list, and more!</string>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Background" translatesAutoresizingMaskIntoConstraints="NO" id="5BM-TJ-xb6">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                             </imageView>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="Pw7-Cg-qxG">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="763"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CustomMenuCell" id="QYW-Pn-K3x" customClass="CustomMenuTableViewCell" customModule="ConnectPle" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="50" width="375" height="131.33332824707031"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="QYW-Pn-K3x" id="euD-La-bIN">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="131.33332824707031"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="UMU-fb-Z8a">
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="131.33333333333334"/>
+                                                    <subviews>
+                                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2MR-4n-D13">
+                                                            <rect key="frame" x="0.0" y="0.0" width="187.66666666666666" height="131.33333333333334"/>
+                                                        </imageView>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q5a-0B-Olx">
+                                                            <rect key="frame" x="187.66666666666663" y="0.0" width="187.33333333333337" height="131.33333333333334"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                            <nil key="textColor"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                </stackView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="UMU-fb-Z8a" secondAttribute="bottom" id="dXl-ms-XAl"/>
+                                                <constraint firstItem="UMU-fb-Z8a" firstAttribute="top" secondItem="euD-La-bIN" secondAttribute="top" id="jey-hj-arz"/>
+                                                <constraint firstAttribute="trailing" secondItem="UMU-fb-Z8a" secondAttribute="trailing" id="lso-BO-chP"/>
+                                                <constraint firstItem="UMU-fb-Z8a" firstAttribute="leading" secondItem="euD-La-bIN" secondAttribute="leading" id="vKv-Sx-VFC"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="customImageView" destination="2MR-4n-D13" id="6t5-T1-2mc"/>
+                                            <outlet property="customLabel" destination="q5a-0B-Olx" id="8Y9-l1-4k0"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="mtR-gT-LhE"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="5BM-TJ-xb6" firstAttribute="leading" secondItem="RwW-ca-zgi" secondAttribute="leading" id="AsD-jD-I9k"/>
+                            <constraint firstItem="mtR-gT-LhE" firstAttribute="bottom" secondItem="Pw7-Cg-qxG" secondAttribute="bottom" id="TiB-z4-U59"/>
+                            <constraint firstItem="Pw7-Cg-qxG" firstAttribute="leading" secondItem="mtR-gT-LhE" secondAttribute="leading" id="UGU-Qt-hHT"/>
                             <constraint firstItem="mtR-gT-LhE" firstAttribute="trailing" secondItem="5BM-TJ-xb6" secondAttribute="trailing" id="WH6-IM-w0R"/>
+                            <constraint firstItem="Pw7-Cg-qxG" firstAttribute="top" secondItem="mtR-gT-LhE" secondAttribute="top" id="csb-rz-vTW"/>
                             <constraint firstItem="5BM-TJ-xb6" firstAttribute="top" secondItem="RwW-ca-zgi" secondAttribute="top" id="dSo-wl-KBu"/>
+                            <constraint firstItem="mtR-gT-LhE" firstAttribute="trailing" secondItem="Pw7-Cg-qxG" secondAttribute="trailing" id="rMj-3x-aU9"/>
                             <constraint firstAttribute="bottom" secondItem="5BM-TJ-xb6" secondAttribute="bottom" id="wqn-3C-Jv9"/>
                         </constraints>
                     </view>
@@ -281,10 +342,14 @@ Manage your couple recipe, honey-do list, and more!</string>
                             </hierarchicalColors>
                         </imageReference>
                     </tabBarItem>
+                    <connections>
+                        <outlet property="tableView" destination="Pw7-Cg-qxG" id="URF-BE-WbO"/>
+                        <segue destination="AeE-wH-Lv7" kind="show" id="C4t-7J-VpI"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VUu-Ab-xyq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1502" y="2384"/>
+            <point key="canvasLocation" x="1501.5999999999999" y="2383.7438423645322"/>
         </scene>
         <!--Relationship-->
         <scene sceneID="nYu-eT-dCn">
@@ -340,10 +405,10 @@ Manage your couple recipe, honey-do list, and more!</string>
             </objects>
             <point key="canvasLocation" x="2149" y="-27"/>
         </scene>
-        <!--Tab Bar Controller-->
+        <!--Main Tab Bar Controller-->
         <scene sceneID="tJO-aj-u6z">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="B3o-6F-SKY" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="B3o-6F-SKY" userLabel="Main Tab Bar Controller" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="4B2-Iq-UWb"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="IDM-uZ-v0F">
@@ -374,16 +439,16 @@ Manage your couple recipe, honey-do list, and more!</string>
         <image name="person.crop.circle" catalog="system" width="128" height="123"/>
         <image name="person.crop.circle.fill" catalog="system" width="128" height="123"/>
         <systemColor name="secondaryLabelColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="tertiaryLabelColor">
-            <color red="0.23529411764705882" green="0.23529411764705882" blue="0.2627450980392157" alpha="0.29803921568627451" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.29803921570000003" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
