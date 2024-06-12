@@ -8,17 +8,16 @@
 import Foundation
 class UserModel: Codable {
 
-    let firstName: String
-    let lastName: String
-    let menuList: [String: MenuItem]
-    struct MenuItem: Codable {
-        let rate: Int
-        let image: String
-    }
+    var firstName: String
+    var lastName: String
+    var menuList: [String: MenuItem]
     
     init(firstName: String, lastName: String, menuList: [String: MenuItem]) {
         self.firstName = firstName
         self.lastName = lastName
         self.menuList = menuList
+    }
+    func addMenuItem(itemName: String, itemInfo: MenuItem) {
+        menuList[itemName] = itemInfo
     }
 }
