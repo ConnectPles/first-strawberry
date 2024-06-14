@@ -22,17 +22,6 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                                 <color key="backgroundColor" red="0.99215686319999996" green="0.74230970534700857" blue="0.67519157811161368" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zkW-u0-ePE">
-                                <rect key="frame" x="93.666666666666671" y="572.33333333333337" width="187.66666666666663" height="67.666666666666629"/>
-                                <fontDescription key="fontDescription" name="Impact" family="Impact" pointSize="25"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="START">
-                                    <color key="titleColor" red="1" green="0.62352941179999999" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="continueBtnTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="SBc-i6-SEb"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" lineBreakMode="tailTruncation" numberOfLines="4" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tlV-RS-xaz">
                                 <rect key="frame" x="50" y="123" width="534" height="244"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -42,23 +31,24 @@ Manage your couple recipe, honey-do list, and more!</string>
                                 <color key="textColor" red="1" green="0.62352941179999999" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="Swq-G7-Yki">
+                                <rect key="frame" x="177.66666666666666" y="658" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="vZK-CO-1T4" secondAttribute="bottom" id="622-hx-NxG"/>
-                            <constraint firstItem="zkW-u0-ePE" firstAttribute="height" secondItem="vZK-CO-1T4" secondAttribute="height" multiplier="1:12" id="8eZ-Dx-MbH"/>
                             <constraint firstItem="vZK-CO-1T4" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="Bum-j5-kNK"/>
-                            <constraint firstItem="zkW-u0-ePE" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="WJN-eG-N0v"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Swq-G7-Yki" secondAttribute="bottom" constant="100" id="Yse-T3-xNr"/>
+                            <constraint firstItem="Swq-G7-Yki" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="dkC-jj-nfg"/>
                             <constraint firstItem="vZK-CO-1T4" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="irz-LH-HkR"/>
-                            <constraint firstItem="zkW-u0-ePE" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" constant="200" id="mNr-0e-0ep"/>
-                            <constraint firstItem="zkW-u0-ePE" firstAttribute="width" secondItem="vZK-CO-1T4" secondAttribute="width" multiplier="1:2" id="q87-Rm-KdV"/>
                             <constraint firstAttribute="trailing" secondItem="vZK-CO-1T4" secondAttribute="trailing" id="w1L-1K-NRA"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="WOo-kZ-gcJ"/>
                     <connections>
-                        <outlet property="logInBtn" destination="zkW-u0-ePE" id="kwt-YU-OBt"/>
+                        <outlet property="loadingIndicator" destination="Swq-G7-Yki" id="soo-vO-AUT"/>
                         <outlet property="verticalLabel" destination="tlV-RS-xaz" id="fdU-eR-geQ"/>
                         <segue destination="2jS-Jd-w1S" kind="presentation" identifier="IndexToMainNav" modalPresentationStyle="fullScreen" modalTransitionStyle="flipHorizontal" id="wCI-cS-Bda"/>
                     </connections>
@@ -115,7 +105,7 @@ Manage your couple recipe, honey-do list, and more!</string>
                                             </attributes>
                                         </fragment>
                                     </attributedString>
-                                    <color key="baseForegroundColor" red="1" green="0.62352941179999999" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <color key="baseForegroundColor" red="0.72549019607843135" green="0.72549019607843135" blue="0.72549019607843135" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="loginBtnTapped:" destination="XE8-r1-DxR" eventType="touchUpInside" id="boe-AW-895"/>
@@ -155,14 +145,19 @@ Manage your couple recipe, honey-do list, and more!</string>
                                     </button>
                                 </subviews>
                             </stackView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Q28-uS-YUA" customClass="DarkenedImageView" customModule="ConnectPle" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                            </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="nOy-cY-P0J"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="Q28-uS-YUA" firstAttribute="top" secondItem="2Sg-0g-Hvr" secondAttribute="top" id="1f3-lb-J43"/>
                             <constraint firstItem="jCi-sX-ymF" firstAttribute="centerX" secondItem="2Sg-0g-Hvr" secondAttribute="centerX" id="2Oz-nj-chI"/>
                             <constraint firstItem="gsu-u2-Ofw" firstAttribute="height" secondItem="fH5-w8-GPi" secondAttribute="height" id="3cV-tj-VZg"/>
                             <constraint firstItem="LGc-8n-dYd" firstAttribute="top" secondItem="gsu-u2-Ofw" secondAttribute="bottom" constant="40" id="46w-3H-bW4"/>
                             <constraint firstItem="TU2-an-iFe" firstAttribute="top" secondItem="LGc-8n-dYd" secondAttribute="bottom" constant="5" id="5IU-ey-jZS"/>
+                            <constraint firstAttribute="bottom" secondItem="Q28-uS-YUA" secondAttribute="bottom" id="7HZ-t2-5EP"/>
                             <constraint firstAttribute="bottom" secondItem="QNb-a5-ijv" secondAttribute="bottom" id="AbE-it-0oM"/>
                             <constraint firstItem="fH5-w8-GPi" firstAttribute="height" secondItem="QNb-a5-ijv" secondAttribute="height" multiplier="1:18" id="C0v-rU-XK1"/>
                             <constraint firstItem="QNb-a5-ijv" firstAttribute="leading" secondItem="2Sg-0g-Hvr" secondAttribute="leading" id="D46-zO-ZO6"/>
@@ -180,23 +175,18 @@ Manage your couple recipe, honey-do list, and more!</string>
                             <constraint firstItem="gsu-u2-Ofw" firstAttribute="leading" secondItem="nOy-cY-P0J" secondAttribute="leading" constant="40" id="gU2-z4-OEU"/>
                             <constraint firstItem="TU2-an-iFe" firstAttribute="width" secondItem="LGc-8n-dYd" secondAttribute="width" id="hb9-Uq-ETK"/>
                             <constraint firstItem="LGc-8n-dYd" firstAttribute="height" secondItem="fH5-w8-GPi" secondAttribute="height" id="jpe-D5-40k"/>
+                            <constraint firstItem="Q28-uS-YUA" firstAttribute="leading" secondItem="nOy-cY-P0J" secondAttribute="leading" id="m2W-Xe-3UB"/>
                             <constraint firstItem="fH5-w8-GPi" firstAttribute="top" secondItem="nOy-cY-P0J" secondAttribute="top" constant="80" id="mZC-fy-ly5"/>
                             <constraint firstItem="nOy-cY-P0J" firstAttribute="trailing" secondItem="fH5-w8-GPi" secondAttribute="trailing" constant="40" id="pXw-nY-Cz8"/>
                             <constraint firstItem="TmX-Un-hZZ" firstAttribute="centerX" secondItem="2Sg-0g-Hvr" secondAttribute="centerX" id="raM-vM-eqR"/>
                             <constraint firstItem="nOy-cY-P0J" firstAttribute="trailing" secondItem="LGc-8n-dYd" secondAttribute="trailing" constant="40" id="s9g-cK-jNw"/>
+                            <constraint firstItem="nOy-cY-P0J" firstAttribute="trailing" secondItem="Q28-uS-YUA" secondAttribute="trailing" id="vcK-cr-Jfh"/>
                             <constraint firstItem="fH5-w8-GPi" firstAttribute="leading" secondItem="nOy-cY-P0J" secondAttribute="leading" constant="40" id="wd7-29-L4w"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="7TW-A0-KN5">
-                        <barButtonItem key="leftBarButtonItem" style="plain" id="rqC-Eb-5pL">
-                            <imageReference key="image" image="arrowshape.left.fill" catalog="system" symbolScale="large"/>
-                            <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <connections>
-                                <action selector="backBtnTapped:" destination="XE8-r1-DxR" id="jIn-bV-DYW"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="7TW-A0-KN5"/>
                     <connections>
+                        <outlet property="darkenedImageView" destination="Q28-uS-YUA" id="F3y-vu-zz0"/>
                         <outlet property="emailTextField" destination="gsu-u2-Ofw" id="pUg-7j-f7A"/>
                         <outlet property="googleSigninButton" destination="ypU-gN-gh1" id="4pS-Sy-yVH"/>
                         <outlet property="loginBtn" destination="TmX-Un-hZZ" id="Qaw-nh-8aH"/>
@@ -207,7 +197,7 @@ Manage your couple recipe, honey-do list, and more!</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="E0W-he-R4a" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3292" y="-28"/>
+            <point key="canvasLocation" x="3292" y="-28.078817733990149"/>
         </scene>
         <!--Profile-->
         <scene sceneID="SWr-qJ-Zak">
@@ -259,7 +249,7 @@ Manage your couple recipe, honey-do list, and more!</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CgA-Ru-tMz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="457" y="2488"/>
+            <point key="canvasLocation" x="1502" y="3296"/>
         </scene>
         <!--Menu-->
         <scene sceneID="ZZO-Gn-AXr">
@@ -277,24 +267,34 @@ Manage your couple recipe, honey-do list, and more!</string>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="CustomMenuCell" id="QYW-Pn-K3x" customClass="CustomMenuTableViewCell" customModule="ConnectPle" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="50" width="375" height="131.33332824707031"/>
+                                        <rect key="frame" x="0.0" y="50" width="375" height="133.66667175292969"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="QYW-Pn-K3x" id="euD-La-bIN">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="131.33332824707031"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="133.66667175292969"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="UMU-fb-Z8a">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="131.33333333333334"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="133.66666666666666"/>
                                                     <subviews>
                                                         <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2MR-4n-D13">
-                                                            <rect key="frame" x="0.0" y="0.0" width="187.66666666666666" height="131.33333333333334"/>
+                                                            <rect key="frame" x="0.0" y="0.0" width="125" height="133.66666666666666"/>
                                                         </imageView>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="q5a-0B-Olx">
-                                                            <rect key="frame" x="187.66666666666663" y="0.0" width="187.33333333333337" height="131.33333333333334"/>
+                                                            <rect key="frame" x="125" y="0.0" width="125" height="133.66666666666666"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
+                                                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8v8-8q-E6g">
+                                                            <rect key="frame" x="250" y="0.0" width="125" height="133.66666666666666"/>
+                                                            <state key="normal" title="Button"/>
+                                                            <buttonConfiguration key="configuration" style="plain" title="">
+                                                                <imageReference key="image" image="plus" catalog="system" symbolScale="large"/>
+                                                            </buttonConfiguration>
+                                                            <connections>
+                                                                <action selector="addBtnTapped:" destination="QYW-Pn-K3x" eventType="touchUpInside" id="98P-6P-iBJ"/>
+                                                            </connections>
+                                                        </button>
                                                     </subviews>
                                                 </stackView>
                                             </subviews>
@@ -306,6 +306,7 @@ Manage your couple recipe, honey-do list, and more!</string>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="addBtn" destination="8v8-8q-E6g" id="eVd-33-rcd"/>
                                             <outlet property="customImageView" destination="2MR-4n-D13" id="6t5-T1-2mc"/>
                                             <outlet property="customLabel" destination="q5a-0B-Olx" id="8Y9-l1-4k0"/>
                                         </connections>
@@ -344,7 +345,7 @@ Manage your couple recipe, honey-do list, and more!</string>
                     </tabBarItem>
                     <connections>
                         <outlet property="tableView" destination="Pw7-Cg-qxG" id="URF-BE-WbO"/>
-                        <segue destination="AeE-wH-Lv7" kind="show" id="C4t-7J-VpI"/>
+                        <segue destination="AeE-wH-Lv7" kind="show" identifier="MenuToEditItem" id="C4t-7J-VpI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VUu-Ab-xyq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -431,13 +432,13 @@ Manage your couple recipe, honey-do list, and more!</string>
     <color key="tintColor" red="1" green="0.62352941179999999" blue="0.62352941179999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
     <resources>
         <image name="Background" width="131" height="284"/>
-        <image name="arrowshape.left.fill" catalog="system" width="128" height="104"/>
         <image name="mail.stack" catalog="system" width="126" height="128"/>
         <image name="mail.stack.fill" catalog="system" width="126" height="128"/>
         <image name="menucard" catalog="system" width="108" height="128"/>
         <image name="menucard.fill" catalog="system" width="105" height="128"/>
         <image name="person.crop.circle" catalog="system" width="128" height="123"/>
         <image name="person.crop.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="plus" catalog="system" width="128" height="113"/>
         <systemColor name="secondaryLabelColor">
             <color red="0.23529411759999999" green="0.23529411759999999" blue="0.26274509800000001" alpha="0.59999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

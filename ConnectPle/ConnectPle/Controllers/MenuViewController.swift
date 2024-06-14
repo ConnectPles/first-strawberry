@@ -7,38 +7,52 @@
 
 import UIKit
 
-class MenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class MenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, CustomMenuTableViewCellDelegate {
     
 
     @IBOutlet weak var tableView: UITableView!
+    
+    let userAccount = UserManager.sharedInstance
     
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.dataSource = self
         tableView.delegate = self
-        // Do any additional setup after loading the view.
     }
     
-    private var menuList = [String]()
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CustomMenuCell", for: indexPath) as! CustomMenuTableViewCell
-        cell.customLabel.text = "Hello"
+        cell.delegate = self
+        if let userProfile = self.userAccount.userProfile {
+            let itemNames = Array(userProfile.getList().keys)
+            if itemNames[indexPath.row] == DEFAULT_MENUITEM {
+                cell.customLabel.isHidden = true
+                cell.customImageView.isHidden = true
+                cell.addBtn.isHidden = false
+            } else {
+                cell.customLabel.isHidden = false
+                cell.customImageView.isHidden = false
+                cell.addBtn.isHidden = true
+                
+                cell.customLabel.text = itemNames[indexPath.row]
+                let item = userProfile.getItem(itemKey: itemNames[indexPath.row])
+                self.userAccount.userProfile?.downloadImage(imageURL: item?.getImageURL(), completion: { resultImage in
+                    if let image = resultImage {
+                        cell.customImageView.image = image
+                    }
+                })
+            }
+        }
         return cell
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int{
-        return 10
+        return self.userAccount.userProfile?.getList().count ?? 1
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    func customMenuTableViewCell(_ cell: CustomMenuTableViewCell, didTapButton button: UIButton) {
+        print("tapped")
     }
-    */
 
 }
