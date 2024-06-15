@@ -23,13 +23,13 @@ class IndexViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        userAccount.logoutUser(completion: {_ in})
-        
         labelHeight = self.view.frame.size.height / 3
         labelWidth = self.view.frame.size.width - 100
         logInBtnHeight = self.view.frame.size.height / 10
         logInBtnWidth = self.view.frame.size.width / 3
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         do {// verticallabel & its animation setup
             verticalLabel.alpha = 0
             verticalLabel.frame = CGRect(x: self.beginPosition.x, y: self.beginPosition.y, width: self.view.frame.size.width - 100, height: 150) // Start off-screen
@@ -46,11 +46,17 @@ class IndexViewController: UIViewController {
             self.loadingIndicator.startAnimating()
         }
         do {// wait then goto next page
-            DispatchQueue.main.asyncAfter(deadline: .now() + INDEX_DELAY_SECONDS) {
-                self.loadingIndicator.stopAnimating()
-                self.performSegue(withIdentifier: "IndexToMainNav", sender: self)
+                self.userAccount.checkIfUserLoggedIn(completion: { result in
+                    if result {
+                        self.loadingIndicator.stopAnimating()
+                        self.performSegue(withIdentifier: "IndexToMain", sender: self)
+
+                    } else {
+                        self.loadingIndicator.stopAnimating()
+                        self.performSegue(withIdentifier: "IndexToLogin", sender: self)
+                    }
+                })
             }
-        }
     }
     
     func animateLabel() {

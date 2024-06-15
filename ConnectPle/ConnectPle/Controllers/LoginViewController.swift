@@ -190,7 +190,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                             case .failure(_):
                                 self.darkenedImageView.hideLoading()
                                 //create new alert
-                                let signupAlert = UIAlertController(title: "Signup Failed", message: "Unable to sign up. Please try again.", preferredStyle: .alert)
+                                let signupAlert = UIAlertController(title: "Register Failed", message: "Unable to register. Please try again.", preferredStyle: .alert)
                                 signupAlert.addAction(UIAlertAction(title: "OK", style: .default))
                                 self.emailTextField.text = ""
                                 self.passwordTextField.text = ""
@@ -199,7 +199,14 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                 }
                             case .success(_):
                                 self.darkenedImageView.hideLoading()
-                                self.performSegue(withIdentifier: "LoginToMain", sender: self)
+                                let signupAlert = UIAlertController(title: "Register Success", message: "Welcome to ConnectPle! Please sign in using your registered credentials.", preferredStyle: .alert)
+                                signupAlert.addAction(UIAlertAction(title: "OK", style: .default))
+                                self.emailTextField.text = ""
+                                self.passwordTextField.text = ""
+                                if !signupAlert.isBeingPresented {
+                                    self.present(signupAlert, animated: true, completion: nil)
+                                }
+//                                self.performSegue(withIdentifier: "LoginToMain", sender: self)
                         }
                     })
                 }

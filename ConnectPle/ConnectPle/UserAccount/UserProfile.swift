@@ -67,20 +67,34 @@ class UserProfile {
         })
     }
     
-    func getList() -> [String: MenuItem] {
-        return self.localUserProfile!.getMenuList()
+    func getMenuListNames() -> [String] {
+        return Array(self.localUserProfile!.getMenuList().keys)
     }
-    func getItem(itemKey: String) -> MenuItem? {
-        return self.localUserProfile!.getMenuItem(itemKey)
+    
+    func getMenuListCount() -> Int {
+        return self.localUserProfile!.getMenuList().count
     }
-    func addItem(itemName: String, rate: Int, imageURL: String?, completion: @escaping ((Bool) -> Void)) {
+    
+    func getItemName(ByIndex index: Int) -> String? {
+        let names = self.getMenuListNames()
+        if index < 0 || index >= names.count {
+            return nil
+        }
+        return names[index]
+    }
+    
+    func getItemInfo(By itemName: String) -> MenuItem? {
+        return self.localUserProfile!.getMenuItem(itemName)
+    }
+    
+    func addItem(itemName: String, rate: Int, imageURL: String?, description: String?, completion: @escaping ((Bool) -> Void)) {
         guard let userProfile = self.localUserProfile else {
             print("ERROR: local userProfile not exist.")
             completion(false)
             return
         }
 
-        if userProfile.addMenuItem(itemName: itemName, rate: rate, imageURL: imageURL) == false {
+        if userProfile.addMenuItem(itemName: itemName, rate: rate, imageURL: imageURL, description: description) == false {
             completion(false)
             return
         }
@@ -88,13 +102,14 @@ class UserProfile {
             completion(result)
         })
     }
-    func removeItem(itemName: String, completion: @escaping ((Bool) -> Void)) {
+    
+    func removeItem(ByName itemName: String, completion: @escaping ((Bool) -> Void)) {
         guard let userProfile = self.localUserProfile else {
             print("ERROR: local userProfile not exist.")
             completion(false)
             return
         }
-        if userProfile.removeMenuItem(itemName: itemName) == false {
+        if userProfile.removeMenuItem(ByItemName: itemName) == false {
             completion(false)
             return
         }
@@ -102,13 +117,29 @@ class UserProfile {
             completion(result)
         })
     }
-    func updateItem(itemName: String, newRate: Int?, newImageURL: String?, completion: @escaping ((Bool) -> Void)) {
+    
+    func removeItem(ByIndex index: Int, completion: @escaping ((Bool) -> Void)) {
         guard let userProfile = self.localUserProfile else {
             print("ERROR: local userProfile not exist.")
             completion(false)
             return
         }
-        if userProfile.updateMenuItem(itemName: itemName, newRate: newRate, newImageURL: newImageURL) == false {
+        if userProfile.removeMenuItem(ByIndex: index) == false {
+            completion(false)
+            return
+        }
+        updateUser(newUserProfile: userProfile, completion: { result in
+            completion(result)
+        })
+    }
+    
+    func updateItem(itemName: String, newRate: Int?, newImageURL: String?, newDescription: String?, completion: @escaping ((Bool) -> Void)) {
+        guard let userProfile = self.localUserProfile else {
+            print("ERROR: local userProfile not exist.")
+            completion(false)
+            return
+        }
+        if userProfile.updateMenuItem(itemName: itemName, newRate: newRate, newImageURL: newImageURL, newDescrption: newDescription) == false {
             completion(false)
             return
         }
@@ -134,16 +165,16 @@ class UserProfile {
                 completion(false)
                 return
             }
-            completion(true)
             let userDict = snapshot.value as! [String: Any]
             do {
                 let jsonData = try JSONSerialization.data(withJSONObject: userDict, options: .prettyPrinted)
                 let remoteUser = try self.decoder.decode(UserModel.self, from: jsonData)
-
                 // Update local data model
                 self.localUserProfile = remoteUser
+                completion(true)
             } catch {
                 print("Decoding error: \(error.localizedDescription)")
+                completion(false)
             }
         })
     }
@@ -159,7 +190,7 @@ class UserProfile {
                     self.revertLocalChanges()
                     completion(false)
                 } else {
-                    print("User Profile Update successful")
+                    print("Remote Update: User Profile Update successful")
                     completion(true)
                 }
             }

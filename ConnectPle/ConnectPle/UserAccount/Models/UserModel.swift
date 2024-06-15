@@ -12,7 +12,7 @@ class UserModel: Codable {
     private var lastName: String
     private var menuList: [String: MenuItem]
     
-    init(firstName: String, lastName: String, menuList: [String: MenuItem] = ["PLACE_HOLDER":MenuItem(rate: -1, imageURL: "")]) {
+    init(firstName: String, lastName: String, menuList: [String: MenuItem] = ["PLACE_HOLDER":MenuItem(rate: -1, imageURL: "", description: "")]) {
         self.firstName = firstName
         self.lastName = lastName
         self.menuList = menuList
@@ -52,16 +52,20 @@ class UserModel: Codable {
         self.lastName = lastName ?? self.lastName
     }
     
-    func addMenuItem(itemName: String, rate: Int, imageURL: String?) -> Bool {
+    func addMenuItem(itemName: String, rate: Int, imageURL: String?, description: String?) -> Bool {
         if menuList.keys.contains(itemName) {
             print("ERROR: Item \(itemName) existed.")
             return false
         }
-        menuList[itemName] = MenuItem(rate: rate, imageURL: imageURL ?? "DEFAULT")
+        // check if DEFAULT ITEM exists, and remove if it does
+        if menuList.keys.contains(DEFAULT_MENUITEM) {
+            _ = self.removeMenuItem(ByItemName: DEFAULT_MENUITEM)
+        }
+        menuList[itemName] = MenuItem(rate: rate, imageURL: imageURL ?? "DEFAULT", description: description ?? "")
         return true
     }
     
-    func removeMenuItem(itemName: String) -> Bool {
+    func removeMenuItem(ByItemName itemName: String) -> Bool {
         if menuList.keys.contains(itemName) == false {
             print("ERROR: Item \(itemName) not exist.")
             return false
@@ -70,13 +74,25 @@ class UserModel: Codable {
         return true
     }
     
-    func updateMenuItem(itemName: String, newRate: Int?, newImageURL: String?) -> Bool {
+    func removeMenuItem(ByIndex index: Int) -> Bool {
+        let names = Array(menuList.keys)
+        if index < 0 || index >= names.count {
+            return false
+        } else {
+            menuList.removeValue(forKey: names[index])
+            return true
+        }
+        
+    }
+    
+    func updateMenuItem(itemName: String, newRate: Int?, newImageURL: String?, newDescrption: String?) -> Bool {
         if menuList.keys.contains(itemName) == false {
             print("ERROR: Item \(itemName) not exist!")
             return false
         }
         menuList[itemName]!.setNewImageURL(newImageURL: newImageURL)
         menuList[itemName]!.setRate(newRate: newRate)
+        menuList[itemName]!.setDescription(newDescription: newDescrption)
         return true
     }
     
