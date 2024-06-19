@@ -19,8 +19,8 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var googleSigninButton: UIButton!
     
     @IBOutlet weak var warningLabel: UILabel!
-    
-//    var alertController: UIAlertController?
+        
+    @IBOutlet weak var darkenedImageView: DarkenedImageView!
     
     var textFieldWidth: CGFloat?
     var textFieldHeight: CGFloat?
@@ -31,6 +31,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.darkenedImageView.hideLoading()
+        
         do {//Create username textfield
             self.textFieldWidth = self.view.frame.width / 3 * 2
             self.textFieldHeight = self.view.frame.height / 15
@@ -66,7 +69,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self.passwordTextField.isSecureTextEntry = true
         }
         do {//set dismiss keyboard
-            let dismissTap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+            let dismissTap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
            view.addGestureRecognizer(dismissTap)
         }
         do {//adjust login button style
@@ -86,13 +89,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    @IBAction func backBtnTapped(_ sender: UIBarButtonItem) {
-        self.warningLabel.text = ""
-        self.dismiss(animated: true)
-    }
-    
     @IBAction func loginBtnTapped(_ sender: UIButton) {
         self.warningLabel.text = ""
+        
+        self.darkenedImageView.showLoading()
+
         if (self.emailTextField.hasText && self.passwordTextField.hasText &&
             self.userAccount.isValidEmail(testStr: self.emailTextField.text!) && self.userAccount.isPasswordSecure(password: self.passwordTextField.text!) == nil) {
             userAccount.loginUser(email: self.emailTextField.text!, password: self.passwordTextField.text!, completion: { result in
@@ -111,44 +112,25 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                         self.presentAlert(title: "Unknown Error", message: "", authError: .unknownError(""))
                     }
                 }
-//                if (result == true) {
-//                    self.performSegue(withIdentifier: "LoginToMain", sender: sender)
-//                }
-//                else {
-//                    //show alarm
-////                    self.warningLabel.text = "Login failed. Email and password not match or account does not exist."
-//                        let alertController = UIAlertController(title: "New User?", message: "Confirm you are registering with email \(self.emailTextField.text!).", preferredStyle: .alert)
-//                        
-//                        // Add an OK action
-//                        let confirmAction = UIAlertAction(title: "Confirm", style: .default) { _ in
-//                            self.performSegue(withIdentifier: "LoginToMain", sender: sender)
-//                        }
-//                        alertController.addAction(confirmAction)
-//                        
-//                        // Add a Cancel action
-//                    let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
-//                        self.emailTextField.text = ""
-//                        self.passwordTextField.text = ""
-//                    }
-//                        alertController.addAction(cancelAction)
-//                        
-//                        // Present the alert controller
-//                        self.present(alertController, animated: true, completion: nil)
-//                    
-//                }
+
+                self.darkenedImageView.hideLoading()
             })
         } else {
+            self.darkenedImageView.hideLoading()
             self.warningLabel.text = "Please choose a login method or sign up!"
         }
     }
     
     
     @IBAction func googleSignInBtnTapped(_ sender: UIButton) {
-        self.userAccount.signupByGoogle(ViewToPresent: self, completion: { result in
+        self.darkenedImageView.showLoading()
+        self.userAccount.signupOrSigninByGoogle(ViewToPresent: self, completion: { result in
             switch result {
             case .success:
+                self.darkenedImageView.hideLoading()
                 self.performSegue(withIdentifier: "LoginToMain", sender: sender)
             case .failure(let authError):
+                self.darkenedImageView.hideLoading()
                 self.presentAlert(title: "Unknown Error", message: "", authError: authError)
             }
         })
@@ -197,16 +179,18 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func presentAlert(title: String, message: String, authError: AuthError) {
-            let loginAlert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-            // Add an OK action
+        let loginAlert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         switch authError {
             case .userNotFound:
                 let confirmAction = UIAlertAction(title: "Confirm", style: .default) { _ in
+
+                    self.darkenedImageView.showLoading()
                     self.userAccount.signupByEmailPassword(email: self.emailTextField.text!, password: self.passwordTextField.text!, completion: { signupError in
                         switch signupError {
                             case .failure(_):
+                                self.darkenedImageView.hideLoading()
                                 //create new alert
-                                let signupAlert = UIAlertController(title: "Signup Failed", message: "Unable to sign up. Please try again.", preferredStyle: .alert)
+                                let signupAlert = UIAlertController(title: "Register Failed", message: "Unable to register. Please try again.", preferredStyle: .alert)
                                 signupAlert.addAction(UIAlertAction(title: "OK", style: .default))
                                 self.emailTextField.text = ""
                                 self.passwordTextField.text = ""
@@ -214,7 +198,10 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                     self.present(signupAlert, animated: true, completion: nil)
                                 }
                             case .success(_):
-                                self.performSegue(withIdentifier: "LoginToMain", sender: self)
+                                self.darkenedImageView.hideLoading()
+                            self.performSegue(withIdentifier: "LoginToMain", sender: self)
+                                self.emailTextField.text = ""
+                                self.passwordTextField.text = ""
                         }
                     })
                 }

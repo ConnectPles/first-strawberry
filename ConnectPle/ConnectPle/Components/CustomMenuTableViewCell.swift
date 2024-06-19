@@ -7,8 +7,10 @@
 
 import UIKit
 
+
 class CustomMenuTableViewCell: UITableViewCell {
     
     @IBOutlet weak var customImageView: UIImageView!
     @IBOutlet weak var customLabel: UILabel!
+
 }

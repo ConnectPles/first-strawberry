@@ -18,36 +18,68 @@ class UserManager {
     //make current class static
     static let sharedInstance = UserManager()
     
-    private var userAuth: User?
-    private var userProfile: UserProfile?
+    private var userIdentity: User?
+    var userProfile: UserProfile?
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
-    
+    private var isUserLoggedIn = false
     
     init() {
-        Auth.auth().addStateDidChangeListener{ Auth, User in
-            if let userAuth = User {
-                print("logged in: " + userAuth.uid)
-                self.userAuth = userAuth
+        Auth.auth().addStateDidChangeListener{ auth, user in
+            if let user = user {
+                self.userIdentity = user
+                //check if newly registered user
+                UserProfile.ifUserProfileExist(dataPath: DATA_PATH, userId: user.uid, completion: { result in
+                    if result == false {
+                        //initialize new user profile
+                        self.userProfile = UserProfile(
+                            firstName: String("Fur" + user.uid.prefix(5)), lastName: "Pup",
+                            uid: user.uid, dataPath: DATA_PATH, completion: { result in
+                                if result {
+                                    print("Signed in: \(user.email ?? "User email not found")")
+                                    self.isUserLoggedIn = true
+                                } else {
+                                    self.isUserLoggedIn = false
+                                }
+                            }
+                        )
+                    } else {
+                        //load existing user profile
+                        self.userProfile = UserProfile(uid: user.uid, dataPath: DATA_PATH, completion: { result in
+                            if result {
+                                print("Signed in: \(user.email ?? "User email not found")")
+                                self.isUserLoggedIn = true
+                            } else {
+                                self.isUserLoggedIn = false
+                            }
+                        })
+                    }
+                })
             }
             else {
                 print("User logged out.")
+                self.isUserLoggedIn = false
             }
         }
     }
     
+    func checkIfUserLoggedIn(completion: @escaping ((Bool) -> Void)) {
+        self.waitForAuthStateChange(timeout: USER_AUTH_TIMEOUT, completion: { result in
+            completion(result)
+        })
+    }
     
-    public func loginUser(email: String, password: String, completion: @escaping (Result<Void, AuthError>) -> Void) {
+    
+    func loginUser(email: String, password: String, completion: @escaping (Result<Void, AuthError>) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password, completion: ({ authResult, error in
             if error == nil && authResult != nil {
-                //load existing user profile
-                self.userProfile = UserProfile(uid: authResult!.user.uid, dataPath: DATA_PATH, completion: { result in
+                self.waitForAuthStateChange(timeout: USER_AUTH_TIMEOUT) { result in
                     if result {
                         completion(.success(()))
                     } else {
                         completion(.failure(.unknownError("ERROR: Login: User profile not found")))
                     }
-                })
+                }
             } else {
                 if let error = error as NSError? {
                     switch error.code {
@@ -68,28 +100,11 @@ class UserManager {
     private func loginUser(credential: AuthCredential, completion: @escaping (Result<Void, AuthError>) -> Void) {
         Auth.auth().signIn(with: credential, completion: { authResult, authError in
             if authError == nil && authResult != nil {
-                if let additionalUserInfo = authResult!.additionalUserInfo {
-                    if additionalUserInfo.isNewUser {
-                        //initialize new user profile
-                        self.userProfile = UserProfile(
-                            firstName: String("Fur" + authResult!.user.uid.prefix(5)), lastName: "Pup",
-                            uid: authResult!.user.uid, dataPath: DATA_PATH, completion: { result in
-                                if result {
-                                    completion(.success(()))
-                                } else {
-                                    completion(.failure(.unknownError("ERROR: Login: User profile not found")))
-                                }
-                            }
-                        )
+                self.waitForAuthStateChange(timeout: USER_AUTH_TIMEOUT) { result in
+                    if result {
+                        completion(.success(()))
                     } else {
-                        //load existing user profile
-                        self.userProfile = UserProfile(uid: authResult!.user.uid, dataPath: DATA_PATH, completion: { result in
-                            if result {
-                                completion(.success(()))
-                            } else {
-                                completion(.failure(.unknownError("ERROR: Login: User profile not found")))
-                            }
-                        })
+                        completion(.failure(.unknownError("ERROR: Login: User profile not found")))
                     }
                 }
             } else {
@@ -111,58 +126,29 @@ class UserManager {
     
     
     //logout user
-    public func logoutUser(completion: @escaping (Bool) -> Void) {
-            do {
-                try Auth.auth().signOut()
-                //unload existing user profile
-                self.userProfile = nil
-                completion(true)
-            } catch let signOutError as NSError{
-                print("Error signing out: %@", signOutError)
-                completion(false)
-            }
+    func logoutUser(completion: @escaping (Bool) -> Void) {
+        do {
+            try Auth.auth().signOut()
+            //unload existing user profile
+            self.userProfile = nil
+            self.isUserLoggedIn = false
+            completion(true)
+        } catch let signOutError as NSError{
+            print("ERROR signing out: %@", signOutError)
+            completion(false)
+        }
     }
     
-//    
-//    private func loadUserAccount (completion: @escaping (Bool) -> Void) {
-//        if let userAuth = self.userAuth {
-//            self.UserAccountRef!.child(userAuth.uid).observeSingleEvent(of: .value, with: { snapshot in
-//                if snapshot.exists() {
-//                    do {
-//                        let userData = try JSONSerialization.data(withJSONObject: snapshot.value!)
-//                        print("json result: \(userData)")
-//                        self.userProfile = try self.decoder.decode(UserModel.self, from: userData)
-//                        print("SUCCESS: UserAccount is loaded.")
-//                        completion(true)
-//                    } catch {
-//                        print("ERROR: UserAccount parsing error: \(error)")
-//                        completion(false)
-//                    }
-//                } else {
-//                    print("ERROR: userAccount node not exist.")
-//                    completion(false)
-//                }
-//            })
-//        }
-//        else {
-//            onAuthUserLoaded.append(completion)
-//        }
-//    }
-    
-    public func signupByEmailPassword(email: String, password: String, completion: @escaping (Result<Void, AuthError>) -> Void) {
+    func signupByEmailPassword(email: String, password: String, completion: @escaping (Result<Void, AuthError>) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if error == nil && authResult != nil {
-                //initialize new user profile
-                self.userProfile = UserProfile(
-                    firstName: String("Fur" + authResult!.user.uid.prefix(5)), lastName: "Pup",
-                    uid: authResult!.user.uid, dataPath: DATA_PATH, completion: { result in
-                        if result {
-                            completion(.success(()))
-                        } else {
-                            completion(.failure(.unknownError("ERROR: Login: User profile not found")))
-                        }
+                self.waitForAuthStateChange(timeout: USER_AUTH_TIMEOUT) { result in
+                    if result {
+                        completion(.success(()))
+                    } else {
+                        completion(.failure(.unknownError("ERROR: Login: User profile not found")))
                     }
-                )
+                }
             } else {
                 if let error = error as NSError? {
                     switch error.code {
@@ -180,7 +166,7 @@ class UserManager {
     }
     
     
-    public func signupByGoogle(ViewToPresent: UIViewController, completion: @escaping (Result<Void, AuthError>) -> Void) {
+    func signupOrSigninByGoogle(ViewToPresent: UIViewController, completion: @escaping (Result<Void, AuthError>) -> Void) {
         if let clientID = FirebaseApp.app()?.options.clientID {
             let config = GIDConfiguration(clientID: clientID)
             GIDSignIn.sharedInstance.configuration = config
@@ -207,7 +193,7 @@ class UserManager {
     }
 
 
-    public func isValidEmail(testStr: String) -> Bool {
+    func isValidEmail(testStr: String) -> Bool {
         let emailRegEx = "^(?:(?:(?:(?: )*(?:(?:(?:\\t| )*\\r\\n)?(?:\\t| )+))+(?: )*)|(?: )+)?(?:(?:(?:[-A-Za-z0-9!#$%&’*+/=?^_'{|}~]+(?:\\.[-A-Za-z0-9!#$%&’*+/=?^_'{|}~]+)*)|(?:\"(?:(?:(?:(?: )*(?:(?:[!#-Z^-~]|\\[|\\])|(?:\\\\(?:\\t|[ -~]))))+(?: )*)|(?: )+)\"))(?:@)(?:(?:(?:[A-Za-z0-9](?:[-A-Za-z0-9]{0,61}[A-Za-z0-9])?)(?:\\.[A-Za-z0-9](?:[-A-Za-z0-9]{0,61}[A-Za-z0-9])?)*)|(?:\\[(?:(?:(?:(?:(?:[0-9]|(?:[1-9][0-9])|(?:1[0-9][0-9])|(?:2[0-4][0-9])|(?:25[0-5]))\\.){3}(?:[0-9]|(?:[1-9][0-9])|(?:1[0-9][0-9])|(?:2[0-4][0-9])|(?:25[0-5]))))|(?:(?:(?: )*[!-Z^-~])*(?: )*)|(?:[Vv][0-9A-Fa-f]+\\.[-A-Za-z0-9._~!$&'()*+,;=:]+))\\])))(?:(?:(?:(?: )*(?:(?:(?:\\t| )*\\r\\n)?(?:\\t| )+))+(?: )*)|(?: )+)?$"
         let emailTest = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         let result = emailTest.evaluate(with: testStr)
@@ -215,28 +201,18 @@ class UserManager {
     }
     
     
-    public func containsOnlyAlphanumerics(_ string: String) -> Bool {
+    func containsOnlyAlphanumerics(_ string: String) -> Bool {
         let allowedCharacterSet = CharacterSet.alphanumerics
         return string.rangeOfCharacter(from: allowedCharacterSet.inverted) == nil
     }
     
     
-    public func containsOnlyLettersAndSpaces(_ string: String) -> Bool {
+    func containsOnlyLettersAndSpaces(_ string: String) -> Bool {
         let allowedCharacterSet = CharacterSet.alphanumerics.union(CharacterSet.whitespaces)
        return string.rangeOfCharacter(from: allowedCharacterSet.inverted) == nil
    }
     
-    
-    public func compressAndConvertImage(image: UIImage, compressionQuality: Double = 0.8) -> String? {
-        guard let imageData = image.jpegData(compressionQuality: compressionQuality) else {
-            print("Unable to compress image.")
-            return nil
-        }
-        return imageData.base64EncodedString()
-    }
-    
-    
-    public func isPasswordSecure(password: String) -> String? {
+    func isPasswordSecure(password: String) -> String? {
         // Check for minimum length
         guard password.count >= 8 else {
             return "Password requires at least 8 characters."
@@ -270,33 +246,23 @@ class UserManager {
         return nil
     }
     
-    public func getUnauthenticatedUsersNames(callback: @escaping ([String]?) -> Void) {
-//        UserAccountRef?.observeSingleEvent(of: .value, with: { snapshot in
-//            var unauthenticatedUserNames: [String] = []
-//            
-//            guard let value = snapshot.value as? [String: Any] else {
-//                callback(nil)
-//                return
-//            }
-//            
-//            for (_, userData) in value {
-//                guard let userDataDict = userData as? [String: Any],
-//                    let isAuthenticated = userDataDict["isAuthenticated"] as? Bool,
-//                    !isAuthenticated,
-//                    let firstName = userDataDict["firstName"] as? String else {
-//                    // Skip users who are authenticated or do not have a first name
-//                    continue
-//                }
-//                
-//                unauthenticatedUserNames.append(firstName)
-//            }
-//            
-//            callback(unauthenticatedUserNames)
-//        }) { error in
-//            print("Error fetching unauthenticated users: \(error.localizedDescription)")
-//            callback(nil)
-//        }
+    private func waitForAuthStateChange(timeout: TimeInterval, completion: @escaping (Bool) -> Void) {
+        let startTime = Date()
+        DispatchQueue.global().async {
+            while !self.isUserLoggedIn {
+                if Date().timeIntervalSince(startTime) > timeout {
+                    // Timeout exceeded
+                    DispatchQueue.main.async {
+                        self.logoutUser(completion: {_ in})//Fault proof
+                        completion(false)
+                    }
+                    return
+                }
+                usleep(100000) // Sleep for 0.1 seconds
+            }
+            DispatchQueue.main.async {
+                completion(true)
+            }
+        }
     }
-
-
 }

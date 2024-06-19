@@ -13,6 +13,14 @@
 		B20FB5FE2C175B490095D543 /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20FB5FD2C175B490095D543 /* MenuItem.swift */; };
 		B20FB5FF2C175B490095D543 /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20FB5FD2C175B490095D543 /* MenuItem.swift */; };
 		B20FB6002C175B490095D543 /* MenuItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20FB5FD2C175B490095D543 /* MenuItem.swift */; };
+		B20FB6022C19F03F0095D543 /* DarkenedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20FB6012C19F03F0095D543 /* DarkenedImageView.swift */; };
+		B20FB6032C19F03F0095D543 /* DarkenedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20FB6012C19F03F0095D543 /* DarkenedImageView.swift */; };
+		B20FB6042C19F03F0095D543 /* DarkenedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20FB6012C19F03F0095D543 /* DarkenedImageView.swift */; };
+		B20FB6062C1A1CE20095D543 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B20FB6052C1A1CE20095D543 /* FirebaseStorage */; };
+		B20FB6092C1B61AD0095D543 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B20FB6082C1B61AD0095D543 /* Kingfisher */; };
+		B2178E552C1E3E1F0023858C /* CreateItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2178E542C1E3E1F0023858C /* CreateItemViewController.swift */; };
+		B2178E562C1E3E1F0023858C /* CreateItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2178E542C1E3E1F0023858C /* CreateItemViewController.swift */; };
+		B2178E572C1E3E1F0023858C /* CreateItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2178E542C1E3E1F0023858C /* CreateItemViewController.swift */; };
 		B22098872BC34D5F00E6E3AB /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22098862BC34D5F00E6E3AB /* UserModel.swift */; };
 		B22098882BC34D5F00E6E3AB /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22098862BC34D5F00E6E3AB /* UserModel.swift */; };
 		B22098892BC34D5F00E6E3AB /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22098862BC34D5F00E6E3AB /* UserModel.swift */; };
@@ -51,9 +59,18 @@
 		B2B691B72B7ED920007691AB /* ConnectPleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B691B62B7ED920007691AB /* ConnectPleTests.swift */; };
 		B2B691C12B7ED920007691AB /* ConnectPleUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B691C02B7ED920007691AB /* ConnectPleUITests.swift */; };
 		B2B691C32B7ED920007691AB /* ConnectPleUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B691C22B7ED920007691AB /* ConnectPleUITestsLaunchTests.swift */; };
+		B2BCCE1E2C1D41F500AC9C08 /* ItemDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BCCE1D2C1D41F500AC9C08 /* ItemDetailsViewController.swift */; };
+		B2BCCE1F2C1D41F500AC9C08 /* ItemDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BCCE1D2C1D41F500AC9C08 /* ItemDetailsViewController.swift */; };
+		B2BCCE202C1D41F500AC9C08 /* ItemDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BCCE1D2C1D41F500AC9C08 /* ItemDetailsViewController.swift */; };
 		B2CC7F4D2BCB4F0200957DE5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B2CC7F4C2BCB4F0200957DE5 /* GoogleService-Info.plist */; };
 		B2CC7F4E2BCB4F0200957DE5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B2CC7F4C2BCB4F0200957DE5 /* GoogleService-Info.plist */; };
 		B2CC7F4F2BCB4F0200957DE5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B2CC7F4C2BCB4F0200957DE5 /* GoogleService-Info.plist */; };
+		B2E71EA82C1CCBCD0092A999 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E71EA72C1CCBCD0092A999 /* ProfileViewController.swift */; };
+		B2E71EA92C1CCBCD0092A999 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E71EA72C1CCBCD0092A999 /* ProfileViewController.swift */; };
+		B2E71EAA2C1CCBCD0092A999 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E71EA72C1CCBCD0092A999 /* ProfileViewController.swift */; };
+		B2E71EAC2C1CCBEC0092A999 /* RelationshipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E71EAB2C1CCBEC0092A999 /* RelationshipViewController.swift */; };
+		B2E71EAD2C1CCBEC0092A999 /* RelationshipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E71EAB2C1CCBEC0092A999 /* RelationshipViewController.swift */; };
+		B2E71EAE2C1CCBEC0092A999 /* RelationshipViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2E71EAB2C1CCBEC0092A999 /* RelationshipViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +93,8 @@
 /* Begin PBXFileReference section */
 		B20FB5F52C1752D60095D543 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		B20FB5FD2C175B490095D543 /* MenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItem.swift; sourceTree = "<group>"; };
+		B20FB6012C19F03F0095D543 /* DarkenedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkenedImageView.swift; sourceTree = "<group>"; };
+		B2178E542C1E3E1F0023858C /* CreateItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateItemViewController.swift; sourceTree = "<group>"; };
 		B22098862BC34D5F00E6E3AB /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		B2211D222B80190100DE823A /* IndexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexViewController.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		B230B54E2B98210B005F2072 /* FriendListsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListsViewController.swift; sourceTree = "<group>"; };
@@ -96,7 +115,10 @@
 		B2B691BC2B7ED920007691AB /* ConnectPleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnectPleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2B691C02B7ED920007691AB /* ConnectPleUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectPleUITests.swift; sourceTree = "<group>"; };
 		B2B691C22B7ED920007691AB /* ConnectPleUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectPleUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B2BCCE1D2C1D41F500AC9C08 /* ItemDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemDetailsViewController.swift; sourceTree = "<group>"; };
 		B2CC7F4C2BCB4F0200957DE5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		B2E71EA72C1CCBCD0092A999 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		B2E71EAB2C1CCBEC0092A999 /* RelationshipViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelationshipViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,6 +130,8 @@
 				B23BBA732BAB65290021294F /* FirebaseAnalyticsSwift in Frameworks */,
 				B23BBA772BAB69F40021294F /* FirebaseFirestore in Frameworks */,
 				B23BBA752BAB69F40021294F /* FirebaseAuth in Frameworks */,
+				B20FB6092C1B61AD0095D543 /* Kingfisher in Frameworks */,
+				B20FB6062C1A1CE20095D543 /* FirebaseStorage in Frameworks */,
 				B23BBA712BAB65290021294F /* FirebaseAnalytics in Frameworks */,
 				B23BBA852BAB77390021294F /* GoogleSignIn in Frameworks */,
 			);
@@ -147,6 +171,10 @@
 				B230B54E2B98210B005F2072 /* FriendListsViewController.swift */,
 				B230B5522B982124005F2072 /* LoginViewController.swift */,
 				B2636B742BDFE23600FBDEF2 /* MenuViewController.swift */,
+				B2E71EA72C1CCBCD0092A999 /* ProfileViewController.swift */,
+				B2E71EAB2C1CCBEC0092A999 /* RelationshipViewController.swift */,
+				B2BCCE1D2C1D41F500AC9C08 /* ItemDetailsViewController.swift */,
+				B2178E542C1E3E1F0023858C /* CreateItemViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -190,6 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				B26FD4672C0E203200805C4B /* CustomMenuTableViewCell.swift */,
+				B20FB6012C19F03F0095D543 /* DarkenedImageView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -270,6 +299,8 @@
 				B23BBA762BAB69F40021294F /* FirebaseFirestore */,
 				B23BBA812BAB75970021294F /* FirebaseDatabase */,
 				B23BBA842BAB77390021294F /* GoogleSignIn */,
+				B20FB6052C1A1CE20095D543 /* FirebaseStorage */,
+				B20FB6082C1B61AD0095D543 /* Kingfisher */,
 			);
 			productName = ConnectPle;
 			productReference = B2B6919C2B7ED91E007691AB /* ConnectPle.app */;
@@ -346,6 +377,7 @@
 			packageReferences = (
 				B23BBA6F2BAB65290021294F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				B23BBA832BAB77390021294F /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				B20FB6072C1B61AD0095D543 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = B2B6919D2B7ED91E007691AB /* Products */;
 			projectDirPath = "";
@@ -397,13 +429,18 @@
 				B2B691A02B7ED91E007691AB /* AppDelegate.swift in Sources */,
 				B2B691A22B7ED91E007691AB /* SceneDelegate.swift in Sources */,
 				B230B5532B982124005F2072 /* LoginViewController.swift in Sources */,
+				B2E71EA82C1CCBCD0092A999 /* ProfileViewController.swift in Sources */,
 				B2636B752BDFE23600FBDEF2 /* MenuViewController.swift in Sources */,
 				B22098872BC34D5F00E6E3AB /* UserModel.swift in Sources */,
 				B20FB5FE2C175B490095D543 /* MenuItem.swift in Sources */,
 				B26FD4682C0E203200805C4B /* CustomMenuTableViewCell.swift in Sources */,
 				B2211D232B80190200DE823A /* IndexViewController.swift in Sources */,
 				B23BBA7A2BAB737E0021294F /* Constants.swift in Sources */,
+				B2178E552C1E3E1F0023858C /* CreateItemViewController.swift in Sources */,
+				B2BCCE1E2C1D41F500AC9C08 /* ItemDetailsViewController.swift in Sources */,
+				B2E71EAC2C1CCBEC0092A999 /* RelationshipViewController.swift in Sources */,
 				B20FB5F62C1752D60095D543 /* UserProfile.swift in Sources */,
+				B20FB6022C19F03F0095D543 /* DarkenedImageView.swift in Sources */,
 				B23BBA7E2BAB75800021294F /* UserManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -414,13 +451,18 @@
 			files = (
 				B26FD4692C0E203200805C4B /* CustomMenuTableViewCell.swift in Sources */,
 				B23BBA7B2BAB737E0021294F /* Constants.swift in Sources */,
+				B20FB6032C19F03F0095D543 /* DarkenedImageView.swift in Sources */,
 				B230B5542B982124005F2072 /* LoginViewController.swift in Sources */,
 				B23BBA7F2BAB75800021294F /* UserManager.swift in Sources */,
 				B230B5502B98210B005F2072 /* FriendListsViewController.swift in Sources */,
+				B2E71EAD2C1CCBEC0092A999 /* RelationshipViewController.swift in Sources */,
+				B2BCCE1F2C1D41F500AC9C08 /* ItemDetailsViewController.swift in Sources */,
 				B2B691B72B7ED920007691AB /* ConnectPleTests.swift in Sources */,
 				B2211D242B80190200DE823A /* IndexViewController.swift in Sources */,
 				B22098882BC34D5F00E6E3AB /* UserModel.swift in Sources */,
+				B2178E562C1E3E1F0023858C /* CreateItemViewController.swift in Sources */,
 				B20FB5F72C1752D60095D543 /* UserProfile.swift in Sources */,
+				B2E71EA92C1CCBCD0092A999 /* ProfileViewController.swift in Sources */,
 				B20FB5FF2C175B490095D543 /* MenuItem.swift in Sources */,
 				B2636B762BDFE23600FBDEF2 /* MenuViewController.swift in Sources */,
 			);
@@ -434,13 +476,18 @@
 				B2B691C12B7ED920007691AB /* ConnectPleUITests.swift in Sources */,
 				B2B691C32B7ED920007691AB /* ConnectPleUITestsLaunchTests.swift in Sources */,
 				B230B5552B982124005F2072 /* LoginViewController.swift in Sources */,
+				B2E71EAA2C1CCBCD0092A999 /* ProfileViewController.swift in Sources */,
 				B2636B772BDFE23600FBDEF2 /* MenuViewController.swift in Sources */,
 				B22098892BC34D5F00E6E3AB /* UserModel.swift in Sources */,
 				B20FB6002C175B490095D543 /* MenuItem.swift in Sources */,
 				B26FD46A2C0E203200805C4B /* CustomMenuTableViewCell.swift in Sources */,
 				B2211D252B80190200DE823A /* IndexViewController.swift in Sources */,
 				B23BBA7C2BAB737E0021294F /* Constants.swift in Sources */,
+				B2178E572C1E3E1F0023858C /* CreateItemViewController.swift in Sources */,
+				B2BCCE202C1D41F500AC9C08 /* ItemDetailsViewController.swift in Sources */,
+				B2E71EAE2C1CCBEC0092A999 /* RelationshipViewController.swift in Sources */,
 				B20FB5F82C1752D60095D543 /* UserProfile.swift in Sources */,
+				B20FB6042C19F03F0095D543 /* DarkenedImageView.swift in Sources */,
 				B23BBA802BAB75800021294F /* UserManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -775,6 +822,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		B20FB6072C1B61AD0095D543 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.12.0;
+			};
+		};
 		B23BBA6F2BAB65290021294F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -794,6 +849,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		B20FB6052C1A1CE20095D543 /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B23BBA6F2BAB65290021294F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		B20FB6082C1B61AD0095D543 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B20FB6072C1B61AD0095D543 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		B23BBA702BAB65290021294F /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = B23BBA6F2BAB65290021294F /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
