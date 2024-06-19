@@ -13,10 +13,4 @@ class CustomMenuTableViewCell: UITableViewCell {
     @IBOutlet weak var customImageView: UIImageView!
     @IBOutlet weak var customLabel: UILabel!
 
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-    }
-
-    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
-    }
 }

@@ -53,6 +53,17 @@ class UserProfile {
         })
     }
     
+    //helper function to check if user already has profile
+    static func ifUserProfileExist(dataPath: String, userId: String, completion: @escaping ((Bool) -> Void)) {
+        Database.database().reference().child(dataPath).child(userId).observeSingleEvent(of: .value, with: { snapshot in
+            if snapshot.exists() {
+                completion(true)
+            } else {
+                completion(false)
+            }
+        })
+    }
+    
     func getFirstName() -> String {
         return self.localUserProfile!.getFirstName()
     }
@@ -87,14 +98,14 @@ class UserProfile {
         return self.localUserProfile!.getMenuItem(itemName)
     }
     
-    func addItem(itemName: String, rate: Int, imageURL: String?, description: String?, completion: @escaping ((Bool) -> Void)) {
+    func addItem(itemName: String, rate: Int, imageURL: URL?, description: String?, completion: @escaping ((Bool) -> Void)) {
         guard let userProfile = self.localUserProfile else {
             print("ERROR: local userProfile not exist.")
             completion(false)
             return
         }
 
-        if userProfile.addMenuItem(itemName: itemName, rate: rate, imageURL: imageURL, description: description) == false {
+        if userProfile.addMenuItem(itemName: itemName, rate: rate, imageURL: imageURL?.absoluteString, description: description) == false {
             completion(false)
             return
         }
@@ -210,8 +221,12 @@ class UserProfile {
         }
     }
     
-    func uploadImageToFirebaseStorage(image: UIImage, completion: @escaping (String?) -> Void) {
-        guard let imageData = image.jpegData(compressionQuality: 0.8) else {
+    func checkIfItemNameExists (itemName: String) -> Bool {
+        return self.localUserProfile!.isMenuItemExist(itemName: itemName)
+    }
+    
+    func uploadImageToFirebaseStorage(image: UIImage?, completion: @escaping (String?) -> Void) {
+        guard let imageData = image?.jpegData(compressionQuality: 0.8) else {
             completion(nil)
             return
         }
@@ -254,8 +269,8 @@ class UserProfile {
                     completion(nil)
                 }
             }
-        } else {
-            print("ERROR downloading image: Invalid URL string")
+        } else if imageURL != nil {
+            print("ERROR downloading image: Invalid URL string \"\(String(describing: imageURL))\"")
             completion(nil)
             return
         }

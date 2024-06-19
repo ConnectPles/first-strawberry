@@ -10,18 +10,33 @@ import UIKit
 class MenuViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
 
-    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var parentTableView: UITableView!
     
     let userAccount = UserManager.sharedInstance
     
     var selectedMenuItemName: String?
+    var selectedMenuItemImage: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.rowHeight = 80 // Set your desired height here
+        parentTableView.dataSource = self
+        parentTableView.delegate = self
+        parentTableView.rowHeight = CGFloat(CELL_HEIGHT)
 
+        NotificationCenter.default.addObserver(self, selector: #selector(dataUpdated), name: Notification.Name("DataUpdated"), object: nil)
+
+    }
+    
+    deinit {
+        // Remove observer
+        NotificationCenter.default.removeObserver(self, name: Notification.Name("DataUpdated"), object: nil)
+    }
+    
+    @objc func dataUpdated() {
+        // Reload the table view on the main thread
+        DispatchQueue.main.async {
+            self.parentTableView.reloadData()
+        }
     }
     
     
@@ -38,7 +53,15 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
                     default:
                         cell.customLabel.isHidden = false
                         cell.customImageView.isHidden = false
+                        cell.customImageView.contentMode = .scaleAspectFill
                         
+                        cell.customImageView.backgroundColor = .clear
+                        cell.customImageView.contentMode = .scaleAspectFill
+                        cell.customImageView.layer.masksToBounds = true
+                        cell.customImageView.layer.cornerRadius = 10
+                        cell.customImageView.layer.borderColor = UIColor.lightGray.cgColor
+                        cell.customImageView.layer.borderWidth = 2.0
+                    
                         cell.customLabel.text = itemName
                         let itemInfo = userProfile.getItemInfo(By: itemName)
                         self.userAccount.userProfile?.downloadImage(imageURL: itemInfo?.getImageURL(), completion: { resultImage in
@@ -81,20 +104,31 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         return true
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.selectedMenuItemName = self.userAccount.userProfile!.getItemName(ByIndex: indexPath.row)
-        performSegue(withIdentifier: "showDestination", sender: self)
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        // Prevent selection of the "PLACE_HOLDER" cell at the unselectable index
+        if self.userAccount.userProfile!.getItemName(ByIndex: indexPath.row) == DEFAULT_MENUITEM {
+            return nil
+        }
+        return indexPath
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "MenuToEditItem" {
-            if let destinationVC = segue.destination as? ItemDetailsViewController {
-                destinationVC.receivedMenuItemName = self.selectedMenuItemName
-            }
-        }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as! CustomMenuTableViewCell
+        self.selectedMenuItemImage = cell.customImageView.image
+        self.selectedMenuItemName = self.userAccount.userProfile!.getItemName(ByIndex: indexPath.row)
+        performSegue(withIdentifier: "MenuToItemDetails", sender: self)
     }
 
     @IBAction func addDishButtonTapped(_ sender: UIButton) {
-        performSegue(withIdentifier: "MenuToEditItem", sender: self)
+        performSegue(withIdentifier: "MenuToAddItem", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "MenuToItemDetails" {
+            if let navController = segue.destination as? UINavigationController, let destinationVC = navController.topViewController as? ItemDetailsViewController {
+                destinationVC.receivedMenuItemName = self.selectedMenuItemName
+                destinationVC.receivedImage = self.selectedMenuItemImage
+            }
+        }
     }
 }

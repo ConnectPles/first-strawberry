@@ -29,30 +29,32 @@ class UserManager {
             if let user = user {
                 self.userIdentity = user
                 //check if newly registered user
-                if user.metadata.lastSignInDate == user.metadata.creationDate {
-                    //initialize new user profile
-                    self.userProfile = UserProfile(
-                        firstName: String("Fur" + user.uid.prefix(5)), lastName: "Pup",
-                        uid: user.uid, dataPath: DATA_PATH, completion: { result in
+                UserProfile.ifUserProfileExist(dataPath: DATA_PATH, userId: user.uid, completion: { result in
+                    if result == false {
+                        //initialize new user profile
+                        self.userProfile = UserProfile(
+                            firstName: String("Fur" + user.uid.prefix(5)), lastName: "Pup",
+                            uid: user.uid, dataPath: DATA_PATH, completion: { result in
+                                if result {
+                                    print("Signed in: \(user.email ?? "User email not found")")
+                                    self.isUserLoggedIn = true
+                                } else {
+                                    self.isUserLoggedIn = false
+                                }
+                            }
+                        )
+                    } else {
+                        //load existing user profile
+                        self.userProfile = UserProfile(uid: user.uid, dataPath: DATA_PATH, completion: { result in
                             if result {
                                 print("Signed in: \(user.email ?? "User email not found")")
                                 self.isUserLoggedIn = true
                             } else {
                                 self.isUserLoggedIn = false
                             }
-                        }
-                    )
-                } else {
-                    //load existing user profile
-                    self.userProfile = UserProfile(uid: user.uid, dataPath: DATA_PATH, completion: { result in
-                        if result {
-                            print("Signed in: \(user.email ?? "User email not found")")
-                            self.isUserLoggedIn = true
-                        } else {
-                            self.isUserLoggedIn = false
-                        }
-                    })
-                }
+                        })
+                    }
+                })
             }
             else {
                 print("User logged out.")
@@ -71,14 +73,6 @@ class UserManager {
     func loginUser(email: String, password: String, completion: @escaping (Result<Void, AuthError>) -> Void) {
         Auth.auth().signIn(withEmail: email, password: password, completion: ({ authResult, error in
             if error == nil && authResult != nil {
-//                //load existing user profile
-//                self.userProfile = UserProfile(uid: authResult!.user.uid, dataPath: DATA_PATH, completion: { result in
-//                    if result {
-//                        completion(.success(()))
-//                    } else {
-//                        completion(.failure(.unknownError("ERROR: Login: User profile not found")))
-//                    }
-//                })
                 self.waitForAuthStateChange(timeout: USER_AUTH_TIMEOUT) { result in
                     if result {
                         completion(.success(()))
@@ -106,31 +100,6 @@ class UserManager {
     private func loginUser(credential: AuthCredential, completion: @escaping (Result<Void, AuthError>) -> Void) {
         Auth.auth().signIn(with: credential, completion: { authResult, authError in
             if authError == nil && authResult != nil {
-//                if let additionalUserInfo = authResult!.additionalUserInfo {
-//                    if additionalUserInfo.isNewUser {
-//                        //initialize new user profile
-//                        self.userProfile = UserProfile(
-//                            firstName: String("Fur" + authResult!.user.uid.prefix(5)), lastName: "Pup",
-//                            uid: authResult!.user.uid, dataPath: DATA_PATH, completion: { result in
-//                                if result {
-//                                    completion(.success(()))
-//                                } else {
-//                                    completion(.failure(.unknownError("ERROR: Login: User profile not found")))
-//                                }
-//                            }
-//                        )
-//                        
-//                    } else {
-//                        //load existing user profile
-//                        self.userProfile = UserProfile(uid: authResult!.user.uid, dataPath: DATA_PATH, completion: { result in
-//                            if result {
-//                                completion(.success(()))
-//                            } else {
-//                                completion(.failure(.unknownError("ERROR: Login: User profile not found")))
-//                            }
-//                        })
-//                    }
-//                }
                 self.waitForAuthStateChange(timeout: USER_AUTH_TIMEOUT) { result in
                     if result {
                         completion(.success(()))
@@ -173,17 +142,6 @@ class UserManager {
     func signupByEmailPassword(email: String, password: String, completion: @escaping (Result<Void, AuthError>) -> Void) {
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if error == nil && authResult != nil {
-//                //initialize new user profile
-//                self.userProfile = UserProfile(
-//                    firstName: String("Fur" + authResult!.user.uid.prefix(5)), lastName: "Pup",
-//                    uid: authResult!.user.uid, dataPath: DATA_PATH, completion: { result in
-//                        if result {
-//                            completion(.success(()))
-//                        } else {
-//                            completion(.failure(.unknownError("ERROR: Login: User profile not found")))
-//                        }
-//                    }
-//                )
                 self.waitForAuthStateChange(timeout: USER_AUTH_TIMEOUT) { result in
                     if result {
                         completion(.success(()))

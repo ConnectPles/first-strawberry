@@ -17,11 +17,13 @@ class ItemDetailsViewController: UIViewController, UIImagePickerControllerDelega
     
     @IBOutlet weak var leftBarButton: UIBarButtonItem!
         
-    @IBOutlet weak var stackView: UIStackView!
+    @IBOutlet weak var parentStackView: UIStackView!
     
     var storedRightBarButtonItem: UIBarButtonItem?
 
     var receivedMenuItemName: String?
+    var receivedImage: UIImage?
+    var noImage = UIImage(named: "NoImage")
     
     let userAccount = UserManager.sharedInstance
     
@@ -33,20 +35,26 @@ class ItemDetailsViewController: UIViewController, UIImagePickerControllerDelega
             storedRightBarButtonItem = rightBarButton
         }
         do {//itemImage setup
-            // Add tap gesture recognizer to the UIImageView
+            self.itemImageView.image = self.receivedImage ?? noImage
             let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageViewTapped))
             self.itemImageView.addGestureRecognizer(tapGestureRecognizer)
             self.itemImageView.isUserInteractionEnabled = false
-            
             self.itemImageView.backgroundColor = .clear
             self.itemImageView.contentMode = .scaleAspectFill
-            self.itemImageView.image = UIImage(named: "NoImage")
+            self.itemImageView.layer.masksToBounds = true
+            self.itemImageView.layer.cornerRadius = 10
+            self.itemImageView.layer.borderColor = UIColor.lightGray.cgColor
+            self.itemImageView.layer.borderWidth = 2.0
         }
         do {//itemName textfield setup
+            self.itemNameTextField.text = self.receivedMenuItemName ?? ""
             self.itemNameTextField.backgroundColor = .clear
             self.itemNameTextField.isUserInteractionEnabled = false
         }
         do {//itemDescription setup
+            if let itemName = self.receivedMenuItemName, let itemInfo = self.userAccount.userProfile!.getItemInfo(By: itemName) {
+                self.itemDescriptionTextfield.text = itemInfo.getDescription()
+            }
             self.itemDescriptionTextfield.backgroundColor = .clear
             self.itemDescriptionTextfield.isUserInteractionEnabled = false
         }
@@ -62,14 +70,14 @@ class ItemDetailsViewController: UIViewController, UIImagePickerControllerDelega
             self.leftBarButton.title = "Save"
             self.showRightBarButton()
             self.enableImageUpload()
-            self.shakeStackView()
+            self.shakeParentStackView()
             self.itemNameTextField.isUserInteractionEnabled = true
             self.itemDescriptionTextfield.isUserInteractionEnabled = true
         default:
             self.leftBarButton.title = "Edit"
             self.hideRightBarButton()
             self.disableImageUpload()
-            self.stopShakeStackView()
+            self.stopShakeParentStackView()
             self.itemNameTextField.isUserInteractionEnabled = false
             self.itemDescriptionTextfield.isUserInteractionEnabled = false
         }
@@ -79,7 +87,7 @@ class ItemDetailsViewController: UIViewController, UIImagePickerControllerDelega
         self.leftBarButton.title = "Edit"
         self.hideRightBarButton()
         self.disableImageUpload()
-        self.stopShakeStackView()
+        self.stopShakeParentStackView()
         self.itemNameTextField.isUserInteractionEnabled = false
         self.itemDescriptionTextfield.isUserInteractionEnabled = false
     }
@@ -124,17 +132,17 @@ class ItemDetailsViewController: UIViewController, UIImagePickerControllerDelega
         self.itemImageView.isUserInteractionEnabled = false
     }
     
-    private func shakeStackView() {
+    private func shakeParentStackView() {
         let shakeAnimation = CABasicAnimation(keyPath: "position")
         shakeAnimation.duration = 0.3
         shakeAnimation.repeatCount = Float.infinity
         shakeAnimation.autoreverses = true
-        shakeAnimation.fromValue = NSValue(cgPoint: CGPoint(x: stackView.center.x - 2, y: stackView.center.y - 2))
-        shakeAnimation.toValue = NSValue(cgPoint: CGPoint(x: stackView.center.x + 2, y: stackView.center.y + 2))
-        stackView.layer.add(shakeAnimation, forKey: "position")
+        shakeAnimation.fromValue = NSValue(cgPoint: CGPoint(x: parentStackView.center.x - 2, y: parentStackView.center.y - 2))
+        shakeAnimation.toValue = NSValue(cgPoint: CGPoint(x: parentStackView.center.x + 2, y: parentStackView.center.y + 2))
+        parentStackView.layer.add(shakeAnimation, forKey: "position")
     }
-    private func stopShakeStackView() {
-        stackView.layer.removeAnimation(forKey: "position")
+    private func stopShakeParentStackView() {
+        parentStackView.layer.removeAnimation(forKey: "position")
     }
     
     private func openPhotoLibrary() {

@@ -18,6 +18,9 @@
 		B20FB6042C19F03F0095D543 /* DarkenedImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B20FB6012C19F03F0095D543 /* DarkenedImageView.swift */; };
 		B20FB6062C1A1CE20095D543 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = B20FB6052C1A1CE20095D543 /* FirebaseStorage */; };
 		B20FB6092C1B61AD0095D543 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = B20FB6082C1B61AD0095D543 /* Kingfisher */; };
+		B2178E552C1E3E1F0023858C /* CreateItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2178E542C1E3E1F0023858C /* CreateItemViewController.swift */; };
+		B2178E562C1E3E1F0023858C /* CreateItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2178E542C1E3E1F0023858C /* CreateItemViewController.swift */; };
+		B2178E572C1E3E1F0023858C /* CreateItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2178E542C1E3E1F0023858C /* CreateItemViewController.swift */; };
 		B22098872BC34D5F00E6E3AB /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22098862BC34D5F00E6E3AB /* UserModel.swift */; };
 		B22098882BC34D5F00E6E3AB /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22098862BC34D5F00E6E3AB /* UserModel.swift */; };
 		B22098892BC34D5F00E6E3AB /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22098862BC34D5F00E6E3AB /* UserModel.swift */; };
@@ -91,6 +94,7 @@
 		B20FB5F52C1752D60095D543 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		B20FB5FD2C175B490095D543 /* MenuItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuItem.swift; sourceTree = "<group>"; };
 		B20FB6012C19F03F0095D543 /* DarkenedImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DarkenedImageView.swift; sourceTree = "<group>"; };
+		B2178E542C1E3E1F0023858C /* CreateItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateItemViewController.swift; sourceTree = "<group>"; };
 		B22098862BC34D5F00E6E3AB /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		B2211D222B80190100DE823A /* IndexViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndexViewController.swift; sourceTree = "<group>"; wrapsLines = 1; };
 		B230B54E2B98210B005F2072 /* FriendListsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListsViewController.swift; sourceTree = "<group>"; };
@@ -170,6 +174,7 @@
 				B2E71EA72C1CCBCD0092A999 /* ProfileViewController.swift */,
 				B2E71EAB2C1CCBEC0092A999 /* RelationshipViewController.swift */,
 				B2BCCE1D2C1D41F500AC9C08 /* ItemDetailsViewController.swift */,
+				B2178E542C1E3E1F0023858C /* CreateItemViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -431,6 +436,7 @@
 				B26FD4682C0E203200805C4B /* CustomMenuTableViewCell.swift in Sources */,
 				B2211D232B80190200DE823A /* IndexViewController.swift in Sources */,
 				B23BBA7A2BAB737E0021294F /* Constants.swift in Sources */,
+				B2178E552C1E3E1F0023858C /* CreateItemViewController.swift in Sources */,
 				B2BCCE1E2C1D41F500AC9C08 /* ItemDetailsViewController.swift in Sources */,
 				B2E71EAC2C1CCBEC0092A999 /* RelationshipViewController.swift in Sources */,
 				B20FB5F62C1752D60095D543 /* UserProfile.swift in Sources */,
@@ -454,6 +460,7 @@
 				B2B691B72B7ED920007691AB /* ConnectPleTests.swift in Sources */,
 				B2211D242B80190200DE823A /* IndexViewController.swift in Sources */,
 				B22098882BC34D5F00E6E3AB /* UserModel.swift in Sources */,
+				B2178E562C1E3E1F0023858C /* CreateItemViewController.swift in Sources */,
 				B20FB5F72C1752D60095D543 /* UserProfile.swift in Sources */,
 				B2E71EA92C1CCBCD0092A999 /* ProfileViewController.swift in Sources */,
 				B20FB5FF2C175B490095D543 /* MenuItem.swift in Sources */,
@@ -476,6 +483,7 @@
 				B26FD46A2C0E203200805C4B /* CustomMenuTableViewCell.swift in Sources */,
 				B2211D252B80190200DE823A /* IndexViewController.swift in Sources */,
 				B23BBA7C2BAB737E0021294F /* Constants.swift in Sources */,
+				B2178E572C1E3E1F0023858C /* CreateItemViewController.swift in Sources */,
 				B2BCCE202C1D41F500AC9C08 /* ItemDetailsViewController.swift in Sources */,
 				B2E71EAE2C1CCBEC0092A999 /* RelationshipViewController.swift in Sources */,
 				B20FB5F82C1752D60095D543 /* UserProfile.swift in Sources */,

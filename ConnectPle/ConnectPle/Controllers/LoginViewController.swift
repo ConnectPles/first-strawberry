@@ -69,7 +69,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             self.passwordTextField.isSecureTextEntry = true
         }
         do {//set dismiss keyboard
-            let dismissTap = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+            let dismissTap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
            view.addGestureRecognizer(dismissTap)
         }
         do {//adjust login button style
@@ -199,14 +199,9 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                 }
                             case .success(_):
                                 self.darkenedImageView.hideLoading()
-                                let signupAlert = UIAlertController(title: "Register Success", message: "Welcome to ConnectPle! Please sign in using your registered credentials.", preferredStyle: .alert)
-                                signupAlert.addAction(UIAlertAction(title: "OK", style: .default))
+                            self.performSegue(withIdentifier: "LoginToMain", sender: self)
                                 self.emailTextField.text = ""
                                 self.passwordTextField.text = ""
-                                if !signupAlert.isBeingPresented {
-                                    self.present(signupAlert, animated: true, completion: nil)
-                                }
-//                                self.performSegue(withIdentifier: "LoginToMain", sender: self)
                         }
                     })
                 }

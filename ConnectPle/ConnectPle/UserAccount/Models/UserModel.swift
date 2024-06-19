@@ -52,13 +52,26 @@ class UserModel: Codable {
         self.lastName = lastName ?? self.lastName
     }
     
+    
+    func getMenuItem(_ itemKey: String) -> MenuItem? {
+        return menuList[itemKey]
+    }
+    
+    func getMenuList() -> [String: MenuItem] {
+        return menuList
+    }
+    
+    func isMenuItemExist(itemName: String) -> Bool {
+        return self.menuList[itemName] != nil
+    }
+    
     func addMenuItem(itemName: String, rate: Int, imageURL: String?, description: String?) -> Bool {
-        if menuList.keys.contains(itemName) {
+        if isMenuItemExist(itemName: itemName) {
             print("ERROR: Item \(itemName) existed.")
             return false
         }
         // check if DEFAULT ITEM exists, and remove if it does
-        if menuList.keys.contains(DEFAULT_MENUITEM) {
+        if isMenuItemExist(itemName: DEFAULT_MENUITEM) {
             _ = self.removeMenuItem(ByItemName: DEFAULT_MENUITEM)
         }
         menuList[itemName] = MenuItem(rate: rate, imageURL: imageURL ?? "DEFAULT", description: description ?? "")
@@ -66,7 +79,7 @@ class UserModel: Codable {
     }
     
     func removeMenuItem(ByItemName itemName: String) -> Bool {
-        if menuList.keys.contains(itemName) == false {
+        if isMenuItemExist(itemName: itemName) == false {
             print("ERROR: Item \(itemName) not exist.")
             return false
         }
@@ -86,7 +99,7 @@ class UserModel: Codable {
     }
     
     func updateMenuItem(itemName: String, newRate: Int?, newImageURL: String?, newDescrption: String?) -> Bool {
-        if menuList.keys.contains(itemName) == false {
+        if isMenuItemExist(itemName: itemName) == false {
             print("ERROR: Item \(itemName) not exist!")
             return false
         }
@@ -94,14 +107,6 @@ class UserModel: Codable {
         menuList[itemName]!.setRate(newRate: newRate)
         menuList[itemName]!.setDescription(newDescription: newDescrption)
         return true
-    }
-    
-    func getMenuItem(_ itemKey: String) -> MenuItem? {
-        return menuList[itemKey]
-    }
-    
-    func getMenuList() -> [String: MenuItem] {
-        return menuList
     }
     
 }
