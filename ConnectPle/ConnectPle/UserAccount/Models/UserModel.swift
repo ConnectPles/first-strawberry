@@ -47,6 +47,15 @@ class UserModel: Codable {
         return self.lastName
     }
     
+    func getImageURL(ByIndex index: Int) -> URL? {
+        let names = Array(menuList.keys)
+        if index < 0 || index >= names.count {
+            return nil
+        } else {
+            return menuList[names[index]]?.getImageURL()
+        }
+    }
+    
     func updateName(firstName: String?, lastName: String?) {
         self.firstName = firstName ?? self.firstName
         self.lastName = lastName ?? self.lastName
@@ -83,8 +92,7 @@ class UserModel: Codable {
             print("ERROR: Item \(itemName) not exist.")
             return false
         }
-        menuList.removeValue(forKey: itemName)
-        return true
+        return menuList.removeValue(forKey: itemName) == nil ? false : true
     }
     
     func removeMenuItem(ByIndex index: Int) -> Bool {

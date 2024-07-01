@@ -63,12 +63,17 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
                         cell.customImageView.layer.borderWidth = 2.0
                     
                         cell.customLabel.text = itemName
-                        let itemInfo = userProfile.getItemInfo(By: itemName)
-                        self.userAccount.userProfile?.downloadImage(imageURL: itemInfo?.getImageURL(), completion: { resultImage in
-                            if let image = resultImage {
-                                cell.customImageView.image = image
-                            }
-                        })
+                    if let imageURL = userProfile.getItemInfo(By: itemName)?.getImageURL() {
+                        if imageURL.absoluteString != DEFAULT_IMAGE_URL {
+                            userProfile.downloadImage(imageURL: imageURL, completion: { resultImage in
+                                if let image = resultImage {
+                                    cell.customImageView.image = image
+                                }
+                            })
+                        } else {
+                            cell.customImageView.image = nil
+                        }
+                    }
                 }
             } else {
                 print("ERROR table cell: item name not found.")
@@ -88,7 +93,7 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Update the data source
-            self.userAccount.userProfile?.removeItem(ByIndex: indexPath.row, completion: { result in
+            self.userAccount.userProfile!.removeItem(ByIndex: indexPath.row, completion: { result in
                 if result {
                     tableView.deleteRows(at: [indexPath], with: .fade)
                 }
@@ -127,7 +132,7 @@ class MenuViewController: UIViewController, UITableViewDelegate, UITableViewData
         if segue.identifier == "MenuToItemDetails" {
             if let navController = segue.destination as? UINavigationController, let destinationVC = navController.topViewController as? ItemDetailsViewController {
                 destinationVC.receivedMenuItemName = self.selectedMenuItemName
-                destinationVC.receivedImage = self.selectedMenuItemImage
+                destinationVC.receivedImage = self.selectedMenuItemImage //could be nil for DEFAULT
             }
         }
     }

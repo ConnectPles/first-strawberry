@@ -15,12 +15,12 @@ import Kingfisher
 class UserProfile {
     private let UID: String
     private let dataPath: String
-    private var localUserProfile: UserModel? {
+    private var localUserModel: UserModel? {
         didSet {
-            previousLocalUserProfile = oldValue
+            previousLocalUserModel = oldValue
         }
     }
-    private var previousLocalUserProfile: UserModel?
+    private var previousLocalUserModel: UserModel?
 
     private let decoder = JSONDecoder()
     private let encoder = JSONEncoder()
@@ -42,8 +42,8 @@ class UserProfile {
         self.dataPath = dataPath
         self.userAccountRef = Database.database().reference().child(dataPath)
         
-        let newUserProfile = UserModel(firstName: firstName, lastName: lastName)
-        self.updateUser(newUserProfile: newUserProfile, completion: { updateResult in
+        let newUserModel = UserModel(firstName: firstName, lastName: lastName)
+        self.updateUser(newUserProfile: newUserModel, completion: { updateResult in
             if updateResult {
                 self.setupDatabaseListener(completion: { listenerResult in completion(listenerResult) })
             } else {
@@ -65,13 +65,13 @@ class UserProfile {
     }
     
     func getFirstName() -> String {
-        return self.localUserProfile!.getFirstName()
+        return self.localUserModel!.getFirstName()
     }
     func getLastName() -> String {
-        return self.localUserProfile!.getLastName()
+        return self.localUserModel!.getLastName()
     }
     func updateName(newFirstName: String?, newLastName: String?, completion: @escaping ((Bool) -> Void)) {
-        guard let userProfile = self.localUserProfile else { return }
+        guard let userProfile = self.localUserModel else { return }
         userProfile.updateName(firstName: newFirstName, lastName: newLastName)
         updateUser(newUserProfile: userProfile, completion: { result in
             completion(result)
@@ -79,11 +79,11 @@ class UserProfile {
     }
     
     func getMenuListNames() -> [String] {
-        return Array(self.localUserProfile!.getMenuList().keys)
+        return Array(self.localUserModel!.getMenuList().keys)
     }
     
     func getMenuListCount() -> Int {
-        return self.localUserProfile!.getMenuList().count
+        return self.localUserModel!.getMenuList().count
     }
     
     func getItemName(ByIndex index: Int) -> String? {
@@ -95,66 +95,84 @@ class UserProfile {
     }
     
     func getItemInfo(By itemName: String) -> MenuItem? {
-        return self.localUserProfile!.getMenuItem(itemName)
+        return self.localUserModel!.getMenuItem(itemName)
     }
     
     func addItem(itemName: String, rate: Int, imageURL: URL?, description: String?, completion: @escaping ((Bool) -> Void)) {
-        guard let userProfile = self.localUserProfile else {
+        guard let userModel = self.localUserModel else {
             print("ERROR: local userProfile not exist.")
             completion(false)
             return
         }
 
-        if userProfile.addMenuItem(itemName: itemName, rate: rate, imageURL: imageURL?.absoluteString, description: description) == false {
+        if userModel.addMenuItem(itemName: itemName, rate: rate, imageURL: imageURL?.absoluteString, description: description) == false {
             completion(false)
             return
         }
-        updateUser(newUserProfile: userProfile, completion: { result in
+        updateUser(newUserProfile: userModel, completion: { result in
             completion(result)
         })
     }
     
     func removeItem(ByName itemName: String, completion: @escaping ((Bool) -> Void)) {
-        guard let userProfile = self.localUserProfile else {
+        guard let userModel = self.localUserModel else {
             print("ERROR: local userProfile not exist.")
             completion(false)
             return
         }
-        if userProfile.removeMenuItem(ByItemName: itemName) == false {
+        if userModel.removeMenuItem(ByItemName: itemName) == false {
             completion(false)
             return
         }
-        updateUser(newUserProfile: userProfile, completion: { result in
+        updateUser(newUserProfile: userModel, completion: { result in
             completion(result)
         })
     }
     
     func removeItem(ByIndex index: Int, completion: @escaping ((Bool) -> Void)) {
-        guard let userProfile = self.localUserProfile else {
+        guard let userModel = self.localUserModel else {
             print("ERROR: local userProfile not exist.")
             completion(false)
             return
         }
-        if userProfile.removeMenuItem(ByIndex: index) == false {
-            completion(false)
-            return
+        //if contains image, remove image first
+        if let imageURL = userModel.getImageURL(ByIndex: index) {
+            self.deleteImageFromFirebaseStorage(fromURL: imageURL, completion: { error in
+                if error == nil {
+                    if userModel.removeMenuItem(ByIndex: index) == false {
+                        print("ERROR: remove item failed.")
+                        completion(false)
+                        return
+                    }
+                    self.updateUser(newUserProfile: userModel, completion: { result in
+                        completion(result)
+                    })
+                } else {
+                    print("ERROR delete images: \(String(describing: error))")
+                    completion(false)
+                }
+            })
         }
-        updateUser(newUserProfile: userProfile, completion: { result in
-            completion(result)
-        })
+//        if userModel.removeMenuItem(ByIndex: index) == false {
+//            completion(false)
+//            return
+//        }
+//        updateUser(newUserProfile: userModel, completion: { result in
+//            completion(result)
+//        })
     }
     
-    func updateItem(itemName: String, newRate: Int?, newImageURL: String?, newDescription: String?, completion: @escaping ((Bool) -> Void)) {
-        guard let userProfile = self.localUserProfile else {
+    func updateItem(itemName: String, newRate: Int?, newImageURL: URL?, newDescription: String?, completion: @escaping ((Bool) -> Void)) {
+        guard let userModel = self.localUserModel else {
             print("ERROR: local userProfile not exist.")
             completion(false)
             return
         }
-        if userProfile.updateMenuItem(itemName: itemName, newRate: newRate, newImageURL: newImageURL, newDescrption: newDescription) == false {
+        if userModel.updateMenuItem(itemName: itemName, newRate: newRate, newImageURL: newImageURL?.absoluteString, newDescrption: newDescription) == false {
             completion(false)
             return
         }
-        updateUser(newUserProfile: userProfile, completion: { result in
+        updateUser(newUserProfile: userModel, completion: { result in
             completion(result)
         })
     }
@@ -181,7 +199,7 @@ class UserProfile {
                 let jsonData = try JSONSerialization.data(withJSONObject: userDict, options: .prettyPrinted)
                 let remoteUser = try self.decoder.decode(UserModel.self, from: jsonData)
                 // Update local data model
-                self.localUserProfile = remoteUser
+                self.localUserModel = remoteUser
                 completion(true)
             } catch {
                 print("Decoding error: \(error.localizedDescription)")
@@ -212,22 +230,22 @@ class UserProfile {
     }
     
     private func updateLocalData(newUserProfile: UserModel) {
-        self.localUserProfile = newUserProfile
+        self.localUserModel = newUserProfile
     }
     
     private func revertLocalChanges() {
-        if let previousUser = previousLocalUserProfile {
-            localUserProfile = previousUser
+        if let previousUser = previousLocalUserModel {
+            localUserModel = previousUser
         }
     }
     
     func checkIfItemNameExists (itemName: String) -> Bool {
-        return self.localUserProfile!.isMenuItemExist(itemName: itemName)
+        return self.localUserModel!.isMenuItemExist(itemName: itemName)
     }
     
-    func uploadImageToFirebaseStorage(image: UIImage?, completion: @escaping (String?) -> Void) {
+    func uploadImageToFirebaseStorage(image: UIImage?, completion: @escaping (String?, URL?) -> Void) {
         guard let imageData = image?.jpegData(compressionQuality: 0.8) else {
-            completion(nil)
+            completion(nil, nil)
             return
         }
 
@@ -236,31 +254,48 @@ class UserProfile {
         storageRef.putData(imageData, metadata: nil) { metadata, error in
             if let error = error {
                 print("ERROR uploading image: \(error.localizedDescription)")
-                completion(nil)
+                completion("Image Upload Failed", nil)
                 return
             }
             
             storageRef.downloadURL { url, error in
                 if let error = error {
                     print("ERROR getting download URL: \(error.localizedDescription)")
-                    completion(nil)
+                    completion("Image URL Inaccessible", nil)
                     return
                 }
-                completion(url?.absoluteString)
+                completion(nil, url)
+            }
+        }
+    }
+    
+    func deleteImageFromFirebaseStorage(fromURL url: URL, completion: @escaping (String?) -> Void) {
+        print(url.absoluteString)
+        if url.absoluteString == DEFAULT_IMAGE_URL {
+            print("Image is default.")
+            completion(nil)
+            return
+        }
+        let storage = Storage.storage()
+        let storageRef = storage.reference(forURL: url.absoluteString)
+
+        storageRef.delete() { error in
+            if let error = error {
+                let errorMessage = "Failed to delete image: \(error.localizedDescription)"
+                print(errorMessage)
+                completion(errorMessage)
+            } else {
+                print("Image successfully deleted")
+                completion(nil)
             }
         }
     }
     
     
-    func downloadImage(imageURL: String?, completion: @escaping ((UIImage?) -> Void)) {
-        if let imageURL = imageURL, let url = URL(string: imageURL) {
-            if imageURL == "" {
-                completion(nil)
-                print("ERROR downloading image: Image url is empty.")
-                return
-            }
+    func downloadImage(imageURL: URL?, completion: @escaping ((UIImage?) -> Void)) {
+        if let imageURL = imageURL {
             // Using Kingfisher to download the image
-            KingfisherManager.shared.retrieveImage(with: url) { result in
+            KingfisherManager.shared.retrieveImage(with: imageURL) { result in
                 switch result {
                 case .success(let value):
                     completion(value.image)
@@ -269,7 +304,7 @@ class UserProfile {
                     completion(nil)
                 }
             }
-        } else if imageURL != nil {
+        } else {
             print("ERROR downloading image: Invalid URL string \"\(String(describing: imageURL))\"")
             completion(nil)
             return

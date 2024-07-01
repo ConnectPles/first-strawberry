@@ -7,10 +7,11 @@
 
 import UIKit
 
-class DarkenedImageView: UIImageView {
+class LoadingIndicatorImageView: UIImageView {
     
     var overlayImageView: UIImageView!
     var activityIndicator: UIActivityIndicatorView!
+    var isLoading = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,7 +26,7 @@ class DarkenedImageView: UIImageView {
     private func setupView() {
         // Create and configure the overlay image view
         overlayImageView = UIImageView(frame: self.bounds)
-        overlayImageView.backgroundColor = UIColor.black.withAlphaComponent(0.5) // Semi-transparent black
+        overlayImageView.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         overlayImageView.contentMode = .scaleToFill
         self.addSubview(overlayImageView)
         
@@ -38,17 +39,19 @@ class DarkenedImageView: UIImageView {
     }
     
     func showLoading() {
+        self.isLoading = true
         self.isHidden = false
         activityIndicator.startAnimating()
     }
     
     func hideLoading() {
+        self.isLoading = false
         self.isHidden = true
         activityIndicator.stopAnimating()
     }
     
     // Ensure this view intercepts all touch events
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        return true
+        return self.isLoading
     }
 }
