@@ -20,7 +20,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var warningLabel: UILabel!
         
-    @IBOutlet weak var darkenedImageView: DarkenedImageView!
+    @IBOutlet weak var loadingIndicatorImageView: LoadingIndicatorImageView!
     
     var textFieldWidth: CGFloat?
     var textFieldHeight: CGFloat?
@@ -32,7 +32,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.darkenedImageView.hideLoading()
+        self.loadingIndicatorImageView.hideLoading()
         
         do {//Create username textfield
             self.textFieldWidth = self.view.frame.width / 3 * 2
@@ -92,7 +92,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
     @IBAction func loginBtnTapped(_ sender: UIButton) {
         self.warningLabel.text = ""
         
-        self.darkenedImageView.showLoading()
+        self.loadingIndicatorImageView.showLoading()
 
         if (self.emailTextField.hasText && self.passwordTextField.hasText &&
             self.userAccount.isValidEmail(testStr: self.emailTextField.text!) && self.userAccount.isPasswordSecure(password: self.passwordTextField.text!) == nil) {
@@ -113,24 +113,24 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                     }
                 }
 
-                self.darkenedImageView.hideLoading()
+                self.loadingIndicatorImageView.hideLoading()
             })
         } else {
-            self.darkenedImageView.hideLoading()
+            self.loadingIndicatorImageView.hideLoading()
             self.warningLabel.text = "Please choose a login method or sign up!"
         }
     }
     
     
     @IBAction func googleSignInBtnTapped(_ sender: UIButton) {
-        self.darkenedImageView.showLoading()
+        self.loadingIndicatorImageView.showLoading()
         self.userAccount.signupOrSigninByGoogle(ViewToPresent: self, completion: { result in
             switch result {
             case .success:
-                self.darkenedImageView.hideLoading()
+                self.loadingIndicatorImageView.hideLoading()
                 self.performSegue(withIdentifier: "LoginToMain", sender: sender)
             case .failure(let authError):
-                self.darkenedImageView.hideLoading()
+                self.loadingIndicatorImageView.hideLoading()
                 self.presentAlert(title: "Unknown Error", message: "", authError: authError)
             }
         })
@@ -184,11 +184,11 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
             case .userNotFound:
                 let confirmAction = UIAlertAction(title: "Confirm", style: .default) { _ in
 
-                    self.darkenedImageView.showLoading()
+                    self.loadingIndicatorImageView.showLoading()
                     self.userAccount.signupByEmailPassword(email: self.emailTextField.text!, password: self.passwordTextField.text!, completion: { signupError in
                         switch signupError {
                             case .failure(_):
-                                self.darkenedImageView.hideLoading()
+                                self.loadingIndicatorImageView.hideLoading()
                                 //create new alert
                                 let signupAlert = UIAlertController(title: "Register Failed", message: "Unable to register. Please try again.", preferredStyle: .alert)
                                 signupAlert.addAction(UIAlertAction(title: "OK", style: .default))
@@ -198,7 +198,7 @@ class LoginViewController: UIViewController, UITextFieldDelegate {
                                     self.present(signupAlert, animated: true, completion: nil)
                                 }
                             case .success(_):
-                                self.darkenedImageView.hideLoading()
+                                self.loadingIndicatorImageView.hideLoading()
                             self.performSegue(withIdentifier: "LoginToMain", sender: self)
                                 self.emailTextField.text = ""
                                 self.passwordTextField.text = ""

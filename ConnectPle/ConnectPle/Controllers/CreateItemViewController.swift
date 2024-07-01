@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 
 extension UIImage {
     func isEqual(to image: UIImage) -> Bool {
@@ -17,13 +18,13 @@ extension UIImage {
     }
 }
 
-class CreateItemViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UIDocumentPickerDelegate, UINavigationControllerDelegate {
+class CreateItemViewController: UIViewController, UITextFieldDelegate, UITextViewDelegate, UIImagePickerControllerDelegate, UIDocumentPickerDelegate, UINavigationControllerDelegate {
 
     @IBOutlet weak var itemImageView: UIImageView!
     
     @IBOutlet weak var itemNameTextfield: UITextField!
     
-    @IBOutlet weak var itemDescriptionTextfield: UITextField!
+    @IBOutlet weak var itemDescriptionTextView: UITextView!
     
     @IBOutlet weak var alarmLabel: UILabel!
     
@@ -33,8 +34,14 @@ class CreateItemViewController: UIViewController, UITextFieldDelegate, UIImagePi
     
     @IBOutlet weak var thirdStarBtn: UIButton!
     
-    @IBOutlet weak var darkenedImageView: DarkenedImageView!
+    @IBOutlet weak var loadingIndicatorImageView: LoadingIndicatorImageView!
     
+    private let placeholderLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Enter your description here..."
+        label.textColor = .lightGray
+        return label
+    }()
     
     let userAccount = UserManager.sharedInstance
     private var noImage = UIImage(named: "NoImage")
@@ -44,7 +51,18 @@ class CreateItemViewController: UIViewController, UITextFieldDelegate, UIImagePi
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.darkenedImageView.hideLoading()
+        self.loadingIndicatorImageView.hideLoading()
+        
+        
+        // Register for keyboard notifications
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
+        do {// retrieve keyboard on background tap
+            //set dismiss keyboard
+            let dismissTap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+            view.addGestureRecognizer(dismissTap)
+        }
         
         do {//itemImage setup
             self.itemImageView.image = noImage
@@ -62,8 +80,17 @@ class CreateItemViewController: UIViewController, UITextFieldDelegate, UIImagePi
         do {// itemNameTextfield setup
             self.itemNameTextfield.delegate = self
         }
-        do {// itemDesriptionTextfield setup
-            self.itemDescriptionTextfield.delegate = self
+        do {// itemDesriptionTextView setup
+            self.itemDescriptionTextView.delegate = self
+            self.itemDescriptionTextView.backgroundColor = .clear
+            itemDescriptionTextView.layer.borderWidth = 1.0
+            itemDescriptionTextView.layer.borderColor = UIColor.lightGray.cgColor
+            itemDescriptionTextView.layer.cornerRadius = 5.0
+            // Add the placeholder label to the text view
+            itemDescriptionTextView.addSubview(placeholderLabel)
+            placeholderLabel.frame = CGRect(x: 5, y: 5, width: itemDescriptionTextView.bounds.width - 10, height: 20)
+            placeholderLabel.isHidden = !itemDescriptionTextView.text.isEmpty
+            
         }
         do {// alarmLabel setup
             self.alarmLabel.isHidden = true
@@ -79,16 +106,53 @@ class CreateItemViewController: UIViewController, UITextFieldDelegate, UIImagePi
             self.secondStarBtn.setImage(UIImage(systemName: "star"), for: .normal)
             self.thirdStarBtn.setImage(UIImage(systemName: "star"), for: .normal)
         }
-        do {// retrieve keyboard on background tap
-            do {//set dismiss keyboard
-                let dismissTap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-               view.addGestureRecognizer(dismissTap)
-            }
-            
-        }
         
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let userInfo = notification.userInfo,
+           let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect,
+           let activeTextView = self.view.firstResponder as? UITextView {
+            
+            let keyboardHeight = keyboardFrame.height
+            adjustViewForKeyboard(height: keyboardHeight, activeTextView: activeTextView)
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        resetViewPosition()
+    }
+    
+    func adjustViewForKeyboard(height: CGFloat, activeTextView: UITextView) {
+        let textViewFrame = activeTextView.convert(activeTextView.bounds, to: self.view)
+        let bottomSpace = self.view.frame.height - (textViewFrame.origin.y + textViewFrame.height)
+        
+        if bottomSpace < height {
+            let adjustmentHeight = height - bottomSpace + 20 // Add a bit of padding
+            UIView.animate(withDuration: 0.3) {
+                self.view.frame.origin.y = -adjustmentHeight
+            }
+        }
+    }
+    
+    func resetViewPosition() {
+        UIView.animate(withDuration: 0.3) {
+            self.view.frame.origin.y = 0
+        }
+    }
+    
+    
+    //for dismiss keyboard
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
+    //MARK: textField Delegate
     // UITextFieldDelegate method to enforce no leading white spaces for the first text field
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField == self.itemNameTextfield {
@@ -99,25 +163,37 @@ class CreateItemViewController: UIViewController, UITextFieldDelegate, UIImagePi
                 self.showTemporaryAlert(message: "Name cannot exceed 30 letters")
                 return false
             }
-        } else if textField == self.itemDescriptionTextfield {
-            if let currentText = textField.text {
-                if currentText.count >= 4000 {
-                    self.showTemporaryAlert(message: "Description cannot exceed 1000 letters")
-                }
-            }
         }
         return true
     }
+    
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
     }
     
-    //for dismiss keyboard
-    @objc func dismissKeyboard() {
-        view.endEditing(true)
+    //MARK: TextView delegate
+    func textViewDidChange(_ textView: UITextView) {
+        if textView == self.itemDescriptionTextView {
+            if let currentText = textView.text {
+                if currentText.count >= 4000 {
+                    self.showTemporaryAlert(message: "Description cannot exceed 4000 letters")
+                }
+            }
+            placeholderLabel.isHidden = !textView.text.isEmpty
+
+        }
     }
     
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
+    
+    //MARK: Image picker delegate
     @objc func imageViewTapped() {
         // Create an action sheet
         let alert = UIAlertController(title: "Upload Image", message: "Choose an option", preferredStyle: .actionSheet)
@@ -169,7 +245,6 @@ class CreateItemViewController: UIViewController, UITextFieldDelegate, UIImagePi
                 self.rateCount = 0
             }
         }
-
     }
     
     @IBAction func thirdStarTapped(_ sender: UIButton) {
@@ -186,7 +261,6 @@ class CreateItemViewController: UIViewController, UITextFieldDelegate, UIImagePi
                 self.rateCount = 0
             }
         }
-
     }
     
     
@@ -203,18 +277,29 @@ class CreateItemViewController: UIViewController, UITextFieldDelegate, UIImagePi
             }
             if let newImage = self.itemImageView.image {
                 
-                self.darkenedImageView.showLoading()
+                self.loadingIndicatorImageView.showLoading()
                 
-                if newImage.isEqual(to: self.noImage!) == false {
-                    self.userAccount.userProfile?.uploadImageToFirebaseStorage(image: newImage, completion: { uploadResult in
-                        guard let newImageURL = URL(string: uploadResult!) else {
-                            print("Invalid URL string.")
-                            
-                            self.darkenedImageView.hideLoading()
-                            
-                            return
+                let isImageDefault = newImage.isEqual(to: self.noImage!)
+                
+                self.userAccount.userProfile!.uploadImageToFirebaseStorage(
+                    image: isImageDefault ? nil : newImage,
+                    completion: { errorStr, resultURL in
+                        var newImageURL: URL?
+                        switch resultURL {
+                            case nil:
+                                switch errorStr {
+                                case nil: //meaning there is no user upload image
+                                    newImageURL = nil
+                                default: // error during uploading image
+                                    print(errorStr!)
+                                    self.loadingIndicatorImageView.hideLoading()
+                                    return
+                                }
+                            default: // image uploading successfully
+                                newImageURL = resultURL
                         }
-                        self.userAccount.userProfile?.addItem(itemName: newItemName, rate: self.rateCount, imageURL: newImageURL, description: self.itemDescriptionTextfield.text, completion: { addResult in
+                        
+                        self.userAccount.userProfile!.addItem(itemName: newItemName, rate: self.rateCount, imageURL: newImageURL, description: self.itemDescriptionTextView.text, completion: { addResult in
                             if addResult {
                                 NotificationCenter.default.post(name: Notification.Name("DataUpdated"), object: nil)
                                 self.dismiss(animated: true)
@@ -222,23 +307,10 @@ class CreateItemViewController: UIViewController, UITextFieldDelegate, UIImagePi
                                 self.showTemporaryAlert(message: "Save new dish failed. Please try again later")
                             }
                             
-                            self.darkenedImageView.hideLoading()
+                            self.loadingIndicatorImageView.hideLoading()
                             
                         })
                     })
-                } else {
-                    self.userAccount.userProfile?.addItem(itemName: newItemName, rate: self.rateCount, imageURL: nil, description: self.itemDescriptionTextfield.text, completion: { result in
-                        if result {
-                            NotificationCenter.default.post(name: Notification.Name("DataUpdated"), object: nil)
-                            self.dismiss(animated: true)
-                        } else {
-                            self.showTemporaryAlert(message: "Save new dish failed. Please try again later")
-                        }
-                        
-                        self.darkenedImageView.hideLoading()
-                        
-                    })
-                }
             }
         }
     }
@@ -255,12 +327,12 @@ class CreateItemViewController: UIViewController, UITextFieldDelegate, UIImagePi
     }
     
     private func openFiles() {
-        let documentPickerController = UIDocumentPickerViewController(documentTypes: ["public.image"], in: .import)
+        let documentPickerController = UIDocumentPickerViewController(forOpeningContentTypes: [UTType.image])
         documentPickerController.delegate = self
         self.present(documentPickerController, animated: true, completion: nil)
     }
     
-    func showTemporaryAlert(message: String, duration: TimeInterval = 2.0) {
+    private func showTemporaryAlert(message: String, duration: TimeInterval = 2.0) {
         // Cancel any existing dismissal work item
         alertDismissWorkItem?.cancel()
         

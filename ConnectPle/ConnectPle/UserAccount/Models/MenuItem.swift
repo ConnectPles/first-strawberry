@@ -47,11 +47,8 @@ class MenuItem: Codable {
         self.rate = newRate ?? self.rate
     }
     
-    func getImageURL() -> String? {
-        if imageURL == "DEFAULT" {
-            return nil
-        }
-        return imageURL
+    func getImageURL() -> URL? {
+        return URL(string: imageURL)
     }
     func setNewImageURL(newImageURL: String?) {
         self.imageURL = newImageURL ?? self.imageURL
